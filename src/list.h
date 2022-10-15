@@ -213,7 +213,7 @@ size_t list<value_type>::size() {
 
 template <class value_type>
 size_t list<value_type>::max_size() {
-  return std::allocator<s21::list<value_type>::Node>().max_size();
+  return std::allocator<hhullen::list<value_type>::Node>().max_size();
 }
 
 template <class value_type>

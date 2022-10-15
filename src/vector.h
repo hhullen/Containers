@@ -255,7 +255,7 @@ size_t vector<value_type>::size() {
 
 template <class value_type>
 size_t vector<value_type>::max_size() {
-  return std::allocator<s21::vector<value_type>::value_type>().max_size();
+  return std::allocator<hhullen::vector<value_type>::value_type>().max_size();
 }
 
 template <class value_type>
