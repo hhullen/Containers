@@ -12,13 +12,16 @@ Some STL template containers implementation. All classes are in hhullen namespac
     * list::iterator;
 
 ## constructors  
+```
 1. list();
 2. explicit list(size_t n);
 3. list(const std::initializer_list<value_type> &items);
 3. list(const list<value_type> &other);
 5. list(list<value_type> &&other);
+```
 
 ## methods
+```
 1. value_type &front();
 2. value_type &back();
 3. iterator begin();
@@ -43,6 +46,7 @@ Some STL template containers implementation. All classes are in hhullen namespac
 22. void emplace_back(Args &&...args);
 23. void emplace_front(Args &&...args);
 24. list<value_type> &operator=(const list<value_type> &other);
+```
 
 # vector
     * value_type = T;
@@ -53,13 +57,16 @@ Some STL template containers implementation. All classes are in hhullen namespac
     * vector::iterator;
 
 ## constructors 
+```
 1. vector();
 2. explicit vector(size_type n);
 3. vector(const std::initializer_list<value_type> &items);
 4. vector(const vector<value_type> &other);
 5. vector(vector<value_type> &&other);
+```
 
 ## methods
+```
 1. vector<value_type> &operator=(vector<value_type> &other);
 2. reference at(size_type pos);
 3. reference operator[](size_type pos);
@@ -83,6 +90,7 @@ Some STL template containers implementation. All classes are in hhullen namespac
 21. iterator emplace(const iterator pos, Args &&...args);
 22. void emplace_back(Args &&...args);
 23. void emplace_front(Args &&...args);
+```
 
 # stack
     * value_type = T;
@@ -91,12 +99,15 @@ Some STL template containers implementation. All classes are in hhullen namespac
     * size_type = size_t;
 
 ## constructors 
+```
 1. stack();
 2. stack(const std::initializer_list<value_type> &items);
 3. stack(const stack<value_type> &other);
 4. stack(stack<value_type> &&other);
+```
 
 ## methods
+```
 1. stack<value_type> &operator=(const stack<value_type> &other);
 2. const_reference top();
 3. bool empty();
@@ -105,6 +116,7 @@ Some STL template containers implementation. All classes are in hhullen namespac
 6. void pop();
 7. void swap(stack &other);
 8. void emplace_front(Args &&...args);
+```
 
 # queue
     * value_type = T;
@@ -113,12 +125,15 @@ Some STL template containers implementation. All classes are in hhullen namespac
     * size_type = size_t;
 
 ## constructors 
+```
 1. queue();
 2. queue(const std::initializer_list<value_type> &items);
 3. queue(const queue<value_type> &other);
 4. queue(queue<value_type> &&other);
+```
 
 ## methods
+```
 1. queue<value_type> &operator=(const queue<value_type> &other);
 2. const_reference front();
 3. const_reference back();
@@ -128,3 +143,4 @@ Some STL template containers implementation. All classes are in hhullen namespac
 7. void pop();
 8. void swap(queue &other);
 9. void emplace_back(Args &&...args);
+```
