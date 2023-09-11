@@ -42,29 +42,29 @@ bool BinTree<Key, Value>::Empty() {
 
 template <comparable Key, class Value>
 BinTree<Key, Value>::Iterator BinTree<Key, Value>::Find(const Key& key) {
-  NodePtr selector = root_;
-  for (; selector && selector != end_;) {
-    Key& selected = selector.get()->key;
-    if (selected < key || key < selected) {
-      selector = selector.get()->childs[selected < key];
-    } else {
-      return BinTree<Key, Value>::Iterator(selector);
-    }
+  NodePtr found = Search(key);
+  if (!found) {
+    found = end_;
   }
-  return BinTree<Key, Value>::Iterator(end_);
+  return BinTree<Key, Value>::Iterator(found);
 }
 
 template <comparable Key, class Value>
 BinTree<Key, Value>::Iterator BinTree<Key, Value>::Emplace(const Key& key,
                                                            const Value& value) {
   snake_.clear();
+  // std::cout << "EMPLACE " << key << "\n";
   NodePtr selector = root_;
+  // std::cout << "SELECTOR " << selector.get()->key << "\n";
   for (; selector && selector != end_;) {
     Key& selected = selector.get()->key;
     if (selected < key || key < selected) {
+      // std::cout << "IS R " << (selected < key) << "\n";
+      // std::cout << "sel " << selected << " key " << key << "\n";
       selector = selector.get()->childs[selected < key];
       snake_.emplace_back(selector.get());
     } else {
+      std::cout << "EQ\n";
       selector.get()->value = value;
       return BinTree<Key, Value>::Iterator(selector);
     }
@@ -73,11 +73,14 @@ BinTree<Key, Value>::Iterator BinTree<Key, Value>::Emplace(const Key& key,
   if (selector == end_) {
     NodePtr& child_r = selector.get()->childs[1];
     child_r.reset(new Node());
+    end_ = child_r;
+    // std::cout << " Move END\n\n";
   } else {
+    // std::cout << "NEW\n\n";
     selector.reset(new Node());
   }
-  selector.get()->value = value;
   selector.get()->key = key;
+  selector.get()->value = value;
   return BinTree<Key, Value>::Iterator(selector);
 }
 
@@ -87,6 +90,28 @@ void BinTree<Key, Value>::Delete(const Key& key) {}
 template <comparable Key, class Value>
 size_t BinTree<Key, Value>::Size() {
   return size_;
+}
+
+// private methods
+
+template <comparable Key, class Value>
+BinTree<Key, Value>::NodePtr BinTree<Key, Value>::Search(const Key& key) {
+  NodePtr selector = root_;
+  for (; selector && selector != end_;) {
+    Key& selected = selector.get()->key;
+    if (selected < key || key < selected) {
+      selector = selector.get()->childs[selected < key];
+      std::cout << "IS R " << (selected < key) << "\n";
+      std::cout << "sel " << selected << " key " << key << " SER " << selector
+                << "\n";
+      std::cout << "NOT\n";
+    } else {
+      std::cout << "EQ\n";
+      break;
+    }
+  }
+  std::cout << "\n";
+  return selector;
 }
 
 }  // namespace hhullen

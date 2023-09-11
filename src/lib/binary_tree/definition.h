@@ -20,8 +20,9 @@ class BinTree {
   class Iterator
       : public std::iterator<std::input_iterator_tag, std::pair<Key, Value>> {
    public:
+    Iterator();
     explicit Iterator(NodePtr node);
-    std::pair<Key, Value>& operator*() const;
+    std::pair<Key, Value> operator*() const;
     Iterator& operator++();
     Iterator& operator--();
     Iterator operator++(int);
@@ -55,6 +56,8 @@ class BinTree {
   size_t size_;
   std::vector<Node*> snake_;
   const size_t max_tree_height_x64 = 92;
+
+  NodePtr Search(const Key& key);
 };
 
 }  // namespace hhullen
