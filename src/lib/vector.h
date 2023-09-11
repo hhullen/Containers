@@ -45,7 +45,7 @@ class vector {
   void swap(vector &other);
 
   template <class... Args>
-  iterator emplace(const iterator pos, Args &&...args);
+  iterator emplace(const iterator &pos, Args &&...args);
   template <typename... Args>
   void emplace_back(Args &&...args);
   template <class... Args>
