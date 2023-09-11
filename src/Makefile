@@ -1,5 +1,5 @@
 MAIN_PROJ_NAME=Containers
-FUNCS= \
+# FUNCS= \
 	lib$(SEP)hash_table$(SEP)*.cc \
 	lib$(SEP)binary_tree$(SEP)*.cc
 TEST_C=$(FUNCS) tests$(SEP)$(MAIN_PROJ_NAME)_tests.cc
