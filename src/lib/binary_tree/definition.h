@@ -8,6 +8,8 @@
 
 namespace hhullen {
 
+enum Childs : char { Left = 0, Right, Parent };
+
 template <class T>
 concept comparable = requires(T val) { val < val; };
 
@@ -21,7 +23,7 @@ class BinTree {
       : public std::iterator<std::input_iterator_tag, std::pair<Key, Value>> {
    public:
     Iterator();
-    explicit Iterator(NodePtr node);
+    Iterator(Node* node);
     std::pair<Key, Value> operator*() const;
     Iterator& operator++();
     Iterator& operator--();
@@ -32,7 +34,6 @@ class BinTree {
 
    private:
     Node* node_ptr_;
-    std::vector<Node*> snake_;
   };
   BinTree();
   ~BinTree();
@@ -51,12 +52,10 @@ class BinTree {
   struct Node {
     Key key;
     Value value;
-    NodePtr childs[2];
+    NodePtr childs[3];
   };
-  NodePtr root_, end_;
+  NodePtr begin_, root_, end_;
   size_t size_;
-  std::vector<Node*> snake_;
-  const size_t max_tree_height_x64 = 92;
 
   void SetNewNodeOnNull(NodePtr& selector, const Key& key, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Key& key, const Value& value);

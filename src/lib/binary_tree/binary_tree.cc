@@ -4,7 +4,7 @@ namespace hhullen {
 
 template <comparable Key, class Value>
 BinTree<Key, Value>::BinTree() : size_{0}, root_{new Node()}, end_{root_} {
-  snake_.reserve(max_tree_height_x64);
+  attended_.reserve(max_tree_height_x64);
 }
 
 template <comparable Key, class Value>
@@ -12,19 +12,24 @@ BinTree<Key, Value>::~BinTree() {}
 
 template <comparable Key, class Value>
 BinTree<Key, Value>::Iterator BinTree<Key, Value>::Begin() {
+  attended_.clear();
+  attended_.emplace_back(root_.get());
   if (root_ != end_) {
-    NodePtr selector = root_.get()->childs[0];
-    for (; selector; selector = selector.get()->childs[0]) {
+    NodePtr selector = root_.get()->childs[Childs::Left];
+    for (; selector; selector = selector.get()->childs[Childs::Left]) {
+      attended_.emplace_back(selector.get());
     }
-    return BinTree<Key, Value>::Iterator(selector);
+    return BinTree<Key, Value>::Iterator(attended_);
   } else {
-    return BinTree<Key, Value>::Iterator(end_);
+    return BinTree<Key, Value>::Iterator(attended_);
   }
 }
 
 template <comparable Key, class Value>
 BinTree<Key, Value>::Iterator BinTree<Key, Value>::End() {
-  return BinTree<Key, Value>::Iterator(end_);
+  attended_.clear();
+  attended_.emplace_back(end_.get());
+  return BinTree<Key, Value>::Iterator(attended_);
 }
 
 template <comparable Key, class Value>
@@ -53,7 +58,7 @@ BinTree<Key, Value>::Iterator BinTree<Key, Value>::Find(const Key& key) {
   if (!found) {
     found = end_;
   }
-  return BinTree<Key, Value>::Iterator(found);
+  return BinTree<Key, Value>::Iterator(attended_);
 }
 
 template <comparable Key, class Value>
@@ -65,11 +70,12 @@ BinTree<Key, Value>::Iterator BinTree<Key, Value>::Emplace(const Key& key,
   } else if (found) {
     found.get()->value = value;
   } else {
-    const Key& last_existed = snake_.back()->key;
-    NodePtr& child = snake_.back()->childs[last_existed < key];
+    const Key& last_existed = attended_.back()->key;
+    NodePtr& child = attended_.back()->childs[last_existed < key];
     SetNewNodeOnNull(child, key, value);
   }
-  return BinTree<Key, Value>::Iterator(found);
+  ++size_;
+  return BinTree<Key, Value>::Iterator(attended_);
 }
 
 template <comparable Key, class Value>
@@ -89,8 +95,8 @@ void BinTree<Key, Value>::SetNewNodeOnEnd(NodePtr& node, const Key& key,
                                           const Value& value) {
   node.get()->key = key;
   node.get()->value = value;
-  node.get()->childs[1].reset(new Node());
-  end_ = node.get()->childs[1];
+  node.get()->childs[Childs::Right].reset(new Node());
+  end_ = node.get()->childs[Childs::Right];
 }
 
 template <comparable Key, class Value>
@@ -103,15 +109,18 @@ void BinTree<Key, Value>::SetNewNodeOnNull(NodePtr& node, const Key& key,
 
 template <comparable Key, class Value>
 BinTree<Key, Value>::NodePtr BinTree<Key, Value>::Search(const Key& key) {
-  snake_.clear();
+  attended_.clear();
+  attended_.emplace_back(root_.get());
   NodePtr selector = root_;
   for (; selector && selector != end_;) {
-    snake_.emplace_back(selector.get());
     const Key& selected = selector.get()->key;
     if (IsKeysEQ(key, selected)) {
       break;
     }
     selector = selector.get()->childs[selected < key];
+    if (selector) {
+      attended_.emplace_back(selector.get());
+    }
   }
   return selector;
 }

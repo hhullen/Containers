@@ -5,7 +5,7 @@ MAIN_PROJ_NAME=Containers
 TEST_C=$(FUNCS) tests$(SEP)$(MAIN_PROJ_NAME)_tests.cc
 EXECUTABLE=$(MAIN_PROJ_NAME)_tests.out
 COMPILER=g++
-STD=--std=c++20
+STD=--std=c++17
 CPP_FLAGS=-Wextra -Werror -Wpedantic -Wshadow \
 		  -Wconversion -Wnull-dereference -Wsign-conversion
 TEST_FLAGS=-lgtest -pthread -lgtest_main
