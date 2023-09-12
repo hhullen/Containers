@@ -66,7 +66,7 @@ clean:
 	$(DELETE_FILE) $(TO_DELETE_FILES)
 
 tests: clean
-	$(COMPILER) $(STD) $(CPP_FLAGS) $(TEST_C) -o $(EXECUTABLE) $(TEST_FLAGS) -I .
+	$(COMPILER) -g $(STD) $(CPP_FLAGS) $(TEST_C) -o $(EXECUTABLE) $(TEST_FLAGS) -I .
 	.$(SEP)$(EXECUTABLE)
 
 $(MAIN_PROJ_NAME).a:

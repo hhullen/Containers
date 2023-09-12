@@ -57,7 +57,10 @@ class BinTree {
   std::vector<Node*> snake_;
   const size_t max_tree_height_x64 = 92;
 
+  void SetNewNodeOnNull(NodePtr& selector, const Key& key, const Value& value);
+  void SetNewNodeOnEnd(NodePtr& selector, const Key& key, const Value& value);
   NodePtr Search(const Key& key);
+  bool IsKeysEQ(const Key& key1, const Key& key2);
 };
 
 }  // namespace hhullen
