@@ -32,6 +32,7 @@ class BinTree {
 
    private:
     Node* node_ptr_;
+    std::vector<Node*> snake_;
   };
   BinTree();
   ~BinTree();

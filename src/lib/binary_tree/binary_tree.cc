@@ -80,7 +80,9 @@ size_t BinTree<Key, Value>::Size() {
   return size_;
 }
 
-// private methods
+/*
+    private methods
+*/
 
 template <comparable Key, class Value>
 void BinTree<Key, Value>::SetNewNodeOnEnd(NodePtr& node, const Key& key,
