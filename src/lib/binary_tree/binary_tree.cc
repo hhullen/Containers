@@ -1,119 +1,147 @@
-// #include "definition.h"
+#include "definition.h"
 
-// namespace hhullen {
+namespace hhullen {
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::BinTree()
-//     : size_{0}, root_{new Node()}, end_{root_}, begin_{root_} {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::BinTree()
+    : size_{0}, root_{new Node()}, end_{root_} {}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::~BinTree() {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::~BinTree() {}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator BinTree<Key, Value>::Begin() {
-//   return BinTree<Key, Value>::Iterator(begin_);
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::Begin() {
+  if (root_ != end_) {
+    NodePtr selector = root_;
+    GoToLeftEnd(selector);
+    return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(
+        selector.get());
+  } else {
+    return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(end_.get());
+  }
+}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator BinTree<Key, Value>::End() {
-//   return BinTree<Key, Value>::Iterator(end_);
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::End() {
+  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(end_.get());
+}
 
-// template <comparable Key, class Value>
-// void BinTree<Key, Value>::Clear() {
-//   root_.reset(new Node());
-//   end_ = root_;
-//   size_ = 0;
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+void BinTree<Value, Key, KeyRetractor, Comparator>::Clear() {
+  root_.reset(new Node());
+  end_ = root_;
+  size_ = 0;
+}
 
-// template <comparable Key, class Value>
-// bool BinTree<Key, Value>::Contains(const Key& key) {
-//   if (Find(key) != End()) {
-//     return true;
-//   }
-//   return false;
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+bool BinTree<Value, Key, KeyRetractor, Comparator>::Contains(const Key& key) {
+  if (Find(key) != End()) {
+    return true;
+  }
+  return false;
+}
 
-// template <comparable Key, class Value>
-// bool BinTree<Key, Value>::Empty() {
-//   return size_ == 0;
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+bool BinTree<Value, Key, KeyRetractor, Comparator>::Empty() {
+  return size_ == 0;
+}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator BinTree<Key, Value>::Find(const Key& key) {
-//   // NodePtr found = Search(key);
-//   // if (!found) {
-//   //   found = end_;
-//   // }
-//   // return BinTree<Key, Value>::Iterator(attended_);
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::Find(const Key& key) {
+  NodePtrPair found = Seek(key);
+  if (!found.second) {
+    found.second = end_;
+  }
+  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(
+      found.second.get());
+}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator BinTree<Key, Value>::Emplace(const Key& key,
-//                                                            const Value&
-//                                                            value) {
-//   // NodePtr found = Search(key);
-//   // if (found == end_) {
-//   //   SetNewNodeOnEnd(found, key, value);
-//   // } else if (found) {
-//   //   found.get()->value = value;
-//   // } else {
-//   //   const Key& last_existed = attended_.back()->key;
-//   //   NodePtr& child = attended_.back()->childs[last_existed < key];
-//   //   SetNewNodeOnNull(child, key, value);
-//   // }
-//   // ++size_;
-//   // return BinTree<Key, Value>::Iterator(attended_);
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::Emplace(const Value& value) {
+  const Key& key = retractor_(value);
+  NodePtrPair found = Seek(key);
+  if (found.second == end_) {
+    SetNewNodeOnEnd(found.second, value);
+    ++size_;
+  } else if (found.second) {
+    found.second.get()->value = value;
+  } else {
+    SetNewNodeOnNull(found, value);
+    ++size_;
+  }
+  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(
+      found.second.get());
+}
 
-// template <comparable Key, class Value>
-// void BinTree<Key, Value>::Delete(const Key& key) {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::Delete(const Key& key) {
+  NodePtrPair found = Seek(key);
+}
 
-// template <comparable Key, class Value>
-// size_t BinTree<Key, Value>::Size() {
-//   return size_;
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+size_t BinTree<Value, Key, KeyRetractor, Comparator>::Size() {
+  return size_;
+}
 
 // /*
 //     private methods
 // */
 
-// template <comparable Key, class Value>
-// void BinTree<Key, Value>::SetNewNodeOnEnd(NodePtr& node, const Key& key,
-//                                           const Value& value) {
-//   node.get()->key = key;
-//   node.get()->value = value;
-//   node.get()->childs[Childs::Right].reset(new Node());
-//   end_ = node.get()->childs[Childs::Right];
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+void BinTree<Value, Key, KeyRetractor, Comparator>::GoToLeftEnd(
+    BinTree<Value, Key, KeyRetractor, Comparator>::NodePtr& selector) {
+  for (; selector.get()->relatives[Node::Relatives::Left];
+       selector = selector.get()->relatives[Node::Relatives::Left]) {
+  }
+}
 
-// template <comparable Key, class Value>
-// void BinTree<Key, Value>::SetNewNodeOnNull(NodePtr& node, const Key& key,
-//                                            const Value& value) {
-//   node.reset(new Node());
-//   node.get()->key = key;
-//   node.get()->value = value;
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnEnd(
+    NodePtr& node, const Value& value) {
+  node.get()->value = value;
+  node.get()->relatives[Node::Relatives::Right].reset(new Node());
+  end_ = node.get()->relatives[Node::Relatives::Right];
+  end_.get()->relatives[Node::Relatives::Parent] = node;
+}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::NodePtr BinTree<Key, Value>::Search(const Key& key) {
-//   NodePtr selector = root_;
-//   // for (; selector && selector != end_;) {
-//   //   const Key& selected = selector.get()->key;
-//   //   if (IsKeysEQ(key, selected)) {
-//   //     break;
-//   //   }
-//   //   selector = selector.get()->childs[selected < key];
-//   //   if (selector) {
-//   //     attended_.emplace_back(selector.get());
-//   //   }
-//   // }
-//   return selector;
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnNull(
+    BinTree<Value, Key, KeyRetractor, Comparator>::NodePtrPair& found,
+    const Value& value) {
+  bool relative_selector =
+      !(found.first.get()->relatives[Node::Relatives::Left] == found.second);
 
-// template <comparable Key, class Value>
-// bool BinTree<Key, Value>::IsKeysEQ(const Key& key1, const Key& key2) {
-//   return !(key1 < key2 || key2 < key1);
-// }
+  found.first.get()->relatives[relative_selector].reset(new Node());
+  found.second = found.first.get()->relatives[relative_selector];
 
-// }  // namespace hhullen
+  found.second.get()->value = value;
+  found.second.get()->relatives[Node::Relatives::Parent] = found.first;
+}
+
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::NodePtrPair
+BinTree<Value, Key, KeyRetractor, Comparator>::Seek(const Key& key) {
+  NodePtr selector = root_, previous;
+  for (; selector && selector != end_;) {
+    previous = selector;
+    const Key& selected = retractor_(selector.get()->value);
+    if (IsKeysEQ(key, selected)) {
+      break;
+    }
+    selector = selector.get()->relatives[comparator_(selected, key)];
+  }
+  return {previous, selector};
+}
+
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+bool BinTree<Value, Key, KeyRetractor, Comparator>::IsKeysEQ(const Key& key1,
+                                                             const Key& key2) {
+  return !(comparator_(key1, key2) || comparator_(key2, key1));
+}
+
+}  // namespace hhullen

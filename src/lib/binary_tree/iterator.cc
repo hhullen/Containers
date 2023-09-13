@@ -1,54 +1,54 @@
-// #include "definition.h"
+#include "definition.h"
 
-// namespace hhullen {
+namespace hhullen {
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator::Iterator() {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::Iterator()
+    : node_ptr_{nullptr} {}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator::Iterator(Node* node) : node_ptr_{node} {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::Iterator(
+    BinTree<Value, Key, KeyRetractor, Comparator>::Node* node)
+    : node_ptr_{node} {}
 
-// template <comparable Key, class Value>
-// std::pair<Key, Value> BinTree<Key, Value>::Iterator::operator*() const {
-//   return {node_ptr_., (*attended_.back()).value};
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+Value BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator*()
+    const {
+  return node_ptr_->value;
+}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator& BinTree<Key, Value>::Iterator::operator++() {
-//   // Node* child_r = attended_.back()->childs[Childs::Right].get();
-//   // if (child_r) {
-//   //   attended_.emplace_back(child_r);
-//   //   Node* child_l = child_r->childs[Childs::Left].get();
-//   //   for (; child_l; child_l = child_l->childs[Childs::Left].get()) {
-//   //     attended_.emplace_back(child_l);
-//   //   }
-//   // } else {
-//   //   attended_.pop_back();
-//   // }
-//   // return *this;
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator&
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++() {
+    return *this;
+}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator& BinTree<Key, Value>::Iterator::operator--() {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator&
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--() {
+  return *this;
+}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator BinTree<Key, Value>::Iterator::operator++(int)
-// {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++(int) {}
 
-// template <comparable Key, class Value>
-// BinTree<Key, Value>::Iterator BinTree<Key, Value>::Iterator::operator--(int)
-// {}
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--(int) {}
 
-// template <comparable Key, class Value>
-// bool BinTree<Key, Value>::Iterator::operator==(
-//     const BinTree<Key, Value>::Iterator& other) const {
-//   // return attended_.back() == other.attended_.back();
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+bool BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator==(
+    const BinTree<Value, Key, KeyRetractor, Comparator>::Iterator& other)
+    const {
+  return node_ptr_ == other.node_ptr_;
+}
 
-// template <comparable Key, class Value>
-// bool BinTree<Key, Value>::Iterator::operator!=(
-//     const BinTree<Key, Value>::Iterator& other) const {
-//   // return attended_.back() != other.attended_.back();
-// }
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+bool BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator!=(
+    const BinTree<Value, Key, KeyRetractor, Comparator>::Iterator& other)
+    const {
+  return node_ptr_ != other.node_ptr_;
+}
 
-// }  // namespace hhullen
+}  // namespace hhullen

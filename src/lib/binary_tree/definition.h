@@ -11,64 +11,64 @@ namespace hhullen {
 template <class T>
 concept comparable = requires(T val) { val < val; };
 
-template <comparable Key, class Value, class KeyRetractor,
+template <class T1>
+class BinTreeKeyRetractor {
+ public:
+  const T1& operator()(const T1& value) const { return value; }
+};
+
+template <class Value, comparable Key = Value,
+          class KeyRetractor = BinTreeKeyRetractor<Value>,
           class Comparator = std::less<Key>>
 class BinTree {
  public:
   struct Node;
   using NodePtr = std::shared_ptr<Node>;
-  // struct Node {
-  //   enum Childs : char { Left = 0, Right, Parent };
-  //   Node() : value{nullptr} {}
-  //   Value* value;
-  //   NodePtr childs[3];
-  // };
-  class Iterator
-      : public std::iterator<std::input_iterator_tag, std::pair<Key, Value>> {
+  using NodePtrPair = std::pair<NodePtr, NodePtr>;
+  struct Node {
+    Value value;
+    enum Relatives : char { Left = 0, Right, Parent };
+    NodePtr relatives[3];
+  };
+  class Iterator : public std::iterator<std::input_iterator_tag, Value> {
    public:
-    // Iterator();
-    // Iterator(Node* node);
-    // std::pair<Key, Value> operator*() const;
-    // Iterator& operator++();
-    // Iterator& operator--();
-    // Iterator operator++(int);
-    // Iterator operator--(int);
-    // bool operator==(const Iterator& other) const;
-    // bool operator!=(const Iterator& other) const;
+    Iterator();
+    Iterator(Node* node);
+    Value operator*() const;
+    Iterator& operator++();
+    Iterator& operator--();
+    Iterator operator++(int);
+    Iterator operator--(int);
+    bool operator==(const Iterator& other) const;
+    bool operator!=(const Iterator& other) const;
 
    private:
     Node* node_ptr_;
   };
-  BinTree() {}
-  // ~BinTree();
+  BinTree();
+  ~BinTree();
 
-  // Iterator Begin();
-  // Iterator End();
-  void Clear() {}
-  // bool Contains(const Key& key);
-  // bool Empty();
-  // Iterator Find(const Key& key);
-  // Iterator Emplace(const Key& key, const Value& value);
-  // void Delete(const Key& key);
-  // size_t Size();
+  Iterator Begin();
+  Iterator End();
+  void Clear();
+  bool Contains(const Key& key);
+  bool Empty();
+  Iterator Find(const Key& key);
+  Iterator Emplace(const Value& value);
+  Iterator Delete(const Key& key);
+  size_t Size();
 
  private:
-  NodePtr begin_, root_, end_;
+  NodePtr root_, end_;
   size_t size_;
-  KeyRetractor _;
+  KeyRetractor retractor_;
+  Comparator comparator_;
 
-  // void SetNewNodeOnNull(NodePtr& selector, const Key& key, const Value&
-  // value); void SetNewNodeOnEnd(NodePtr& selector, const Key& key, const
-  // Value& value); NodePtr Search(const Key& key); bool IsKeysEQ(const Key&
-  // key1, const Key& key2);
-};
-
-template <class Value>
-struct Node {
-  enum Childs : char { Left = 0, Right, Parent };
-  Node() : value{nullptr} {}
-  Value* value;
-  std::shared_ptr<Node> childs[3];
+  void GoToLeftEnd(NodePtr& selector);
+  void SetNewNodeOnNull(NodePtrPair& found, const Value& value);
+  void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
+  NodePtrPair Seek(const Key& key);
+  bool IsKeysEQ(const Key& key1, const Key& key2);
 };
 
 }  // namespace hhullen

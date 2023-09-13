@@ -1,51 +1,84 @@
 #include <gtest/gtest.h>
-// #include <lib/binary_tree/binary_tree.h>
-#include <lib/binary_tree/definition.h>
+#include <lib/binary_tree/binary_tree.h>
+// #include <lib/binary_tree/definition.h>
 
 #include <map>
 
-class Test1 {
+void FillTree(hhullen::BinTree<double>& tree) {
+  tree.Emplace(1);
+
+  tree.Emplace(0.9);
+  tree.Emplace(1.1);
+
+  tree.Emplace(0.8);
+  tree.Emplace(0.91);
+  tree.Emplace(1.05);
+  tree.Emplace(1.2);
+
+  tree.Emplace(0.7);
+  tree.Emplace(0.82);
+  tree.Emplace(0.905);
+  tree.Emplace(0.92);
+  tree.Emplace(1.04);
+  tree.Emplace(1.06);
+  tree.Emplace(1.15);
+  tree.Emplace(1.3);
+}
+
+class TestClass {
  public:
-  Test1() {}
-  bool operator<(const Test1& src) const { return true; }
-  void operator()() const { return; }
+  TestClass() {}
+  bool operator<(const TestClass& src) const { return true; }
+};
+
+template <class T1>
+class TestRetractor {
+ public:
+  const T1& operator()(const T1& value) const { return value; }
 };
 
 TEST(BinTree, Constructor) {
-  // hhullen::BinTree<char, int> tree1;
-  hhullen::BinTree<Test1, int, Test1> tree2;
+  hhullen::BinTree<TestClass> tree1;
+  hhullen::BinTree<int, int, TestRetractor<int>> tree2;
+  hhullen::BinTree<char, float> tree3;
 }
 
-// TEST(BinTree, Begin_empty) {
-//   hhullen::BinTree<Test1, int> tree;
-//   EXPECT_TRUE(tree.Begin() == tree.End());
-// }
+TEST(BinTree, Begin_empty) {
+  hhullen::BinTree<int> tree;
+  EXPECT_TRUE(tree.Begin() == tree.End());
+}
 
-// TEST(BinTree, End_empty) {
-//   hhullen::BinTree<Test1, int> tree;
-//   EXPECT_TRUE(tree.Begin() == tree.End());
-// }
+TEST(BinTree, Begin_) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree);
+  EXPECT_EQ(*(tree.Begin()), 0.7);
+}
 
-// TEST(BinTree, Clear_empty) {
-//   hhullen::BinTree<Test1, int> tree;
-//   EXPECT_NO_THROW(tree.Clear());
-// }
+TEST(BinTree, End_empty) {
+  hhullen::BinTree<int> tree;
+  EXPECT_TRUE(tree.Begin() == tree.End());
+}
 
-// TEST(BinTree, Contains_empty) {
-//   hhullen::BinTree<Test1, int> tree;
-//   Test1 test_v;
-//   EXPECT_FALSE(tree.Contains(test_v));
-// }
+TEST(BinTree, Clear_empty) {
+  hhullen::BinTree<int> tree;
+  EXPECT_NO_THROW(tree.Clear());
+}
 
-// TEST(BinTree, Empty_empty) {
-//   hhullen::BinTree<Test1, int> tree;
-//   EXPECT_TRUE(tree.Empty());
-// }
+TEST(BinTree, Contains_empty) {
+  hhullen::BinTree<int> tree;
+  int test_v;
+  EXPECT_FALSE(tree.Contains(test_v));
+}
 
-// TEST(BinTree, Find_empty) {
-//   hhullen::BinTree<double, int> tree;
-//   EXPECT_TRUE(tree.Find(0.21) == tree.End());
-// }
+TEST(BinTree, Empty_empty) {
+  hhullen::BinTree<int> tree;
+  EXPECT_TRUE(tree.Empty());
+}
+
+TEST(BinTree, Find_empty) {
+  hhullen::BinTree<int, double> tree;
+  EXPECT_TRUE(tree.Find(0.21) == tree.End());
+}
 
 // struct Aboba {
 //   bool a : 1, b : 1, c : 1, d : 1, e : 1, f : 1, g : 1, h : 1;
@@ -95,7 +128,7 @@ TEST(BinTree, Constructor) {
 //   using tree = Tree<const Key, Key, Ret, std::less<Key>>;
 // };
 
-// std::ostream& operator<<(std::ostream& out, const Test1& aboba) {
+// std::ostream& operator<<(std::ostream& out, const int& aboba) {
 //   return out << "HUITA";
 // }
 
@@ -116,32 +149,92 @@ TEST(BinTree, Constructor) {
 //   return out << '}';
 // }
 
-// TEST(BinTree, Emplace_simple) {
-//   std::map<Test1, int> m{{Test1(), 5}};
-// std::map<int, int> m2(m.begin(), m.end());
-// std::cout << m << std::endl << m2 << std::endl;
-// m.begin()->first = 50;
-// std::cout << m << std::endl << m2 << std::endl;
+TEST(BinTree, Emplace_simple) {
+  hhullen::BinTree<double> tree;
+  tree.Emplace(1);
+  tree.Emplace(0.5);
+  tree.Emplace(1.5);
+  tree.Emplace(1.6);
+  tree.Emplace(0.4);
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Find(1);
+  EXPECT_EQ(*iter, 1);
+  iter = tree.Find(0.5);
+  EXPECT_EQ(*iter, 0.5);
+  iter = tree.Find(1.5);
+  EXPECT_EQ(*iter, 1.5);
+  iter = tree.Find(1.6);
+  EXPECT_EQ(*iter, 1.6);
+  iter = tree.Find(0.4);
+  EXPECT_EQ(*iter, 0.4);
+  iter = tree.Find(10);
+  EXPECT_EQ(iter, tree.End());
+  EXPECT_EQ(tree.Size(), 5);
+}
 
-// std::cout << sizeof(Aboba);
-// Aboba aboba;
-// std::cout << aboba << std::endl;
-// aboba.a = true;
-// std::cout << aboba;
-// bool& ref = aboba.a;
-// std::cout << std::endl << ref;
-// hhullen::BinTree<double, int> tree;
-// tree.Emplace(1, 1);
-// tree.Emplace(0.5, 2);
-// tree.Emplace(1.5, 3);
-// hhullen::BinTree<double, int>::Iterator iter;
-// iter = tree.Find(1);
-// EXPECT_EQ((*iter).second, 1);
-// iter = tree.Find(0.5);
-// EXPECT_EQ((*iter).second, 2);
-// iter = tree.Find(1.5);
-// EXPECT_EQ((*iter).second, 3);
-// tree.Emplace(1.5, 4);
-// iter = tree.Find(1.5);
-// EXPECT_EQ((*iter).second, 4);
-// }
+TEST(BinTree, Emplace_full_directions) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree);
+
+  tree.Emplace(1);
+
+  tree.Emplace(0.9);
+  tree.Emplace(1.1);
+
+  tree.Emplace(0.8);
+  tree.Emplace(0.91);
+  tree.Emplace(1.05);
+  tree.Emplace(1.2);
+
+  tree.Emplace(0.7);
+  tree.Emplace(0.82);
+  tree.Emplace(0.905);
+  tree.Emplace(0.92);
+  tree.Emplace(1.04);
+  tree.Emplace(1.06);
+  tree.Emplace(1.15);
+  tree.Emplace(1.3);
+
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Find(1);
+  EXPECT_EQ(*iter, 1);
+
+  iter = tree.Find(0.9);
+  EXPECT_EQ(*iter, 0.9);
+  iter = tree.Find(1.1);
+  EXPECT_EQ(*iter, 1.1);
+
+  iter = tree.Find(0.8);
+  EXPECT_EQ(*iter, 0.8);
+  iter = tree.Find(0.91);
+  EXPECT_EQ(*iter, 0.91);
+  iter = tree.Find(1.05);
+  EXPECT_EQ(*iter, 1.05);
+  iter = tree.Find(1.2);
+  EXPECT_EQ(*iter, 1.2);
+
+  iter = tree.Find(0.7);
+  EXPECT_EQ(*iter, 0.7);
+  iter = tree.Find(0.82);
+  EXPECT_EQ(*iter, 0.82);
+  iter = tree.Find(0.905);
+  EXPECT_EQ(*iter, 0.905);
+  iter = tree.Find(0.92);
+  EXPECT_EQ(*iter, 0.92);
+  iter = tree.Find(1.04);
+  EXPECT_EQ(*iter, 1.04);
+  iter = tree.Find(1.06);
+  EXPECT_EQ(*iter, 1.06);
+  iter = tree.Find(1.15);
+  EXPECT_EQ(*iter, 1.15);
+  iter = tree.Find(1.3);
+  EXPECT_EQ(*iter, 1.3);
+
+  iter = tree.Find(10);
+  EXPECT_EQ(iter, tree.End());
+  iter = tree.Find(-2);
+  EXPECT_EQ(iter, tree.End());
+  iter = tree.Find(0.906);
+  EXPECT_EQ(iter, tree.End());
+  EXPECT_EQ(tree.Size(), 15);
+}
