@@ -31,17 +31,14 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++() {
     Node* parent_right = MakeStep(node_ptr_, Node::Relatives::Parent);
     parent_right = MakeStep(parent_right, Node::Relatives::Right);
     if (parent_right == node_ptr_) {
-      Node* selector = node_ptr_;
       for (; Comparator()(
                KeyRetractor()(
                    MakeStep(node_ptr_, Node::Relatives::Parent)->value),
                KeyRetractor()(node_ptr_->value));) {
         node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
       }
-      node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
-    } else {
-      node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
     }
+    node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
   }
   return *this;
 }
@@ -68,17 +65,14 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--() {
     Node* parent_left = MakeStep(node_ptr_, Node::Relatives::Parent);
     parent_left = MakeStep(parent_left, Node::Relatives::Left);
     if (parent_left == node_ptr_) {
-      Node* selector = node_ptr_;
       for (; Comparator()(
                KeyRetractor()(node_ptr_->value),
                KeyRetractor()(
                    MakeStep(node_ptr_, Node::Relatives::Parent)->value));) {
         node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
       }
-      node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
-    } else {
-      node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
     }
+    node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
   }
   return *this;
 }
