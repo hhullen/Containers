@@ -32,15 +32,27 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++() {
     Node* parent_right = MakeStep(node_ptr_, Node::Relatives::Parent);
     parent_right = MakeStep(parent_right, Node::Relatives::Right);
     if (parent_right == node_ptr_) {
-      node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
+      Node* selector = node_ptr_;
+      for (; Comparator()(
+               KeyRetractor()(
+                   MakeStep(node_ptr_, Node::Relatives::Parent)->value),
+               KeyRetractor()(node_ptr_->value));) {
+        node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
+      }
       node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
     } else {
       node_ptr_ = MakeStep(node_ptr_, Node::Relatives::Parent);
     }
-    // parent?
-    // where?
   }
   return *this;
+}
+
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++(int) {
+  BinTree<Value, Key, KeyRetractor, Comparator>::Iterator iter(*this);
+  ++(*this);
+  return iter;
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -48,10 +60,6 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator&
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--() {
   return *this;
 }
-
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++(int) {}
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator

@@ -36,14 +36,14 @@ class BinTree {
     Iterator(Node* node, Node* end);
     Value operator*() const;
     Iterator& operator++();
-    Iterator& operator--();
     Iterator operator++(int);
+    Iterator& operator--();
     Iterator operator--(int);
     bool operator==(const Iterator& other) const;
     bool operator!=(const Iterator& other) const;
 
    private:
-    Node *node_ptr_, *end_, *border_;
+    Node *node_ptr_, *end_, *begin_;
 
     Node* MakeStep(Node* node, char direction);
   };
