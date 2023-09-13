@@ -64,7 +64,7 @@ class BinTree {
   NodePtr root_, end_;
   size_t size_;
 
-  static void GoToLeftEnd(NodePtr& selector);
+  static void GoToEnd(NodePtr& selector, char direction);
   void SetNewNodeOnNull(NodePtrPair& found, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);

@@ -14,7 +14,7 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
 BinTree<Value, Key, KeyRetractor, Comparator>::Begin() {
   if (root_ != end_) {
     NodePtr selector = root_;
-    GoToLeftEnd(selector);
+    GoToEnd(selector, Node::Relatives::Left);
     return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(
         selector.get(), end_.get());
   } else {
@@ -101,10 +101,11 @@ size_t BinTree<Value, Key, KeyRetractor, Comparator>::Size() {
 // */
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
-void BinTree<Value, Key, KeyRetractor, Comparator>::GoToLeftEnd(
-    BinTree<Value, Key, KeyRetractor, Comparator>::NodePtr& selector) {
-  for (; selector.get()->relatives[Node::Relatives::Left];
-       selector = selector.get()->relatives[Node::Relatives::Left]) {
+void BinTree<Value, Key, KeyRetractor, Comparator>::GoToEnd(
+    BinTree<Value, Key, KeyRetractor, Comparator>::NodePtr& selector,
+    char direction) {
+  for (; selector.get()->relatives[direction];
+       selector = selector.get()->relatives[direction]) {
   }
 }
 
