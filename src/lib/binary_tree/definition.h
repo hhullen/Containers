@@ -33,7 +33,7 @@ class BinTree {
   class Iterator : public std::iterator<std::input_iterator_tag, Value> {
    public:
     Iterator();
-    Iterator(Node* node);
+    Iterator(Node* node, Node* end);
     Value operator*() const;
     Iterator& operator++();
     Iterator& operator--();
@@ -43,7 +43,9 @@ class BinTree {
     bool operator!=(const Iterator& other) const;
 
    private:
-    Node* node_ptr_;
+    Node *node_ptr_, *end_, *border_;
+
+    Node* MakeStep(Node* node, char direction);
   };
   BinTree();
   ~BinTree();
@@ -61,14 +63,12 @@ class BinTree {
  private:
   NodePtr root_, end_;
   size_t size_;
-  KeyRetractor retractor_;
-  Comparator comparator_;
 
-  void GoToLeftEnd(NodePtr& selector);
+  static void GoToLeftEnd(NodePtr& selector);
   void SetNewNodeOnNull(NodePtrPair& found, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
-  bool IsKeysEQ(const Key& key1, const Key& key2);
+  bool IsEQ(const Key& key1, const Key& key2);
 };
 
 }  // namespace hhullen
