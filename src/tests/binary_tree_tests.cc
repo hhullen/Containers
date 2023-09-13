@@ -276,46 +276,52 @@ TEST(BinTree_Iterator, Iterator_postfix_INcrement_2) {
   }
 }
 
-// TEST(BinTree_Iterator, Iterator_prefix_DEcrement_1) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree_Iterator, Iterator_prefix_DEcrement_1) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); --iter,
-//   --i) {
-//     EXPECT_EQ(data_result_1.at(i), *iter);
-//   }
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  --iter;
+  for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); --iter, --i) {
+    EXPECT_EQ(data_result_1.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_1.at(0), *iter);
+}
 
-// TEST(BinTree_Iterator, Iterator_prefix_DEcrement_2) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_2);
+TEST(BinTree_Iterator, Iterator_prefix_DEcrement_2) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_2);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); --iter,
-//   --i) {
-//     EXPECT_EQ(data_result_2.at(i), *iter);
-//   }
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  --iter;
+  for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); --iter, --i) {
+    EXPECT_EQ(data_result_2.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_2.at(0), *iter);
+}
 
-// TEST(BinTree_Iterator, Iterator_postfix_DEcrement_1) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree_Iterator, Iterator_postfix_DEcrement_1) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); iter--,
-//   --i) {
-//     EXPECT_EQ(data_result_1.at(i), *iter);
-//   }
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  iter--;
+  for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); iter--, --i) {
+    EXPECT_EQ(data_result_1.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_1.at(0), *iter);
+}
 
-// TEST(BinTree_Iterator, Iterator_postfix_DEcrement_2) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_2);
+TEST(BinTree_Iterator, Iterator_postfix_DEcrement_2) {
+  // for (int j = 0; j < 100000; ++j) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_2);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); iter--,
-//   --i) {
-//     EXPECT_EQ(data_result_2.at(i), *iter);
-//   }
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  iter--;
+  for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); iter--, --i) {
+    EXPECT_EQ(data_result_2.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_2.at(0), *iter);
+  // }
+}
