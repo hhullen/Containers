@@ -1,4 +1,6 @@
+#ifndef SRC_LIB_BINARY_TREE_DEFINITION_H_
 #include "definition.h"
+#endif  // SRC_LIB_BINARY_TREE_DEFINITION_H_
 
 namespace hhullen {
 
