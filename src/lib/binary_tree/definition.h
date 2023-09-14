@@ -43,7 +43,7 @@ class BinTree {
     bool operator!=(const Iterator& other) const;
 
    private:
-    Node *node_ptr_, *end_, *begin_;
+    Node *node_ptr_, *end_;
 
     Node* MakeStep(Node* node, char direction);
   };
@@ -68,7 +68,7 @@ class BinTree {
   void SetNewNodeOnNull(NodePtrPair& found, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
-  bool IsEQ(const Key& key1, const Key& key2);
+  static bool IsEQ(const Key& key1, const Key& key2);
 };
 
 }  // namespace hhullen

@@ -244,6 +244,11 @@ TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {
   for (size_t i = 0; iter != tree.End(); ++iter, ++i) {
     EXPECT_EQ(data_result_1.at(i), *iter);
   }
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
 }
 
 TEST(BinTree_Iterator, Iterator_prefix_INcrement_2) {
@@ -254,6 +259,11 @@ TEST(BinTree_Iterator, Iterator_prefix_INcrement_2) {
   for (size_t i = 0; iter != tree.End(); ++iter, ++i) {
     EXPECT_EQ(data_result_2.at(i), *iter);
   }
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
 }
 
 TEST(BinTree_Iterator, Iterator_postfix_INcrement_1) {
@@ -264,6 +274,11 @@ TEST(BinTree_Iterator, Iterator_postfix_INcrement_1) {
   for (size_t i = 0; iter != tree.End(); iter++, ++i) {
     EXPECT_EQ(data_result_1.at(i), *iter);
   }
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
 }
 
 TEST(BinTree_Iterator, Iterator_postfix_INcrement_2) {
@@ -274,6 +289,11 @@ TEST(BinTree_Iterator, Iterator_postfix_INcrement_2) {
   for (size_t i = 0; iter != tree.End(); iter++, ++i) {
     EXPECT_EQ(data_result_2.at(i), *iter);
   }
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
 }
 
 TEST(BinTree_Iterator, Iterator_prefix_DEcrement_1) {
@@ -286,6 +306,10 @@ TEST(BinTree_Iterator, Iterator_prefix_DEcrement_1) {
     EXPECT_EQ(data_result_1.at(i), *iter);
   }
   EXPECT_EQ(data_result_1.at(0), *iter);
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
 }
 
 TEST(BinTree_Iterator, Iterator_prefix_DEcrement_2) {
@@ -298,6 +322,10 @@ TEST(BinTree_Iterator, Iterator_prefix_DEcrement_2) {
     EXPECT_EQ(data_result_2.at(i), *iter);
   }
   EXPECT_EQ(data_result_2.at(0), *iter);
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
 }
 
 TEST(BinTree_Iterator, Iterator_postfix_DEcrement_1) {
@@ -310,6 +338,10 @@ TEST(BinTree_Iterator, Iterator_postfix_DEcrement_1) {
     EXPECT_EQ(data_result_1.at(i), *iter);
   }
   EXPECT_EQ(data_result_1.at(0), *iter);
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
 }
 
 TEST(BinTree_Iterator, Iterator_postfix_DEcrement_2) {
@@ -323,5 +355,9 @@ TEST(BinTree_Iterator, Iterator_postfix_DEcrement_2) {
     EXPECT_EQ(data_result_2.at(i), *iter);
   }
   EXPECT_EQ(data_result_2.at(0), *iter);
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
   // }
 }
