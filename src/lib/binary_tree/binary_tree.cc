@@ -4,7 +4,7 @@ namespace hhullen {
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::BinTree()
-    : size_{0}, root_{new Node()}, end_{root_} {}
+    : root_{new Node()}, end_{root_}, size_{0} {}
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::~BinTree() {}
@@ -97,7 +97,7 @@ size_t BinTree<Value, Key, KeyRetractor, Comparator>::Size() {
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 void BinTree<Value, Key, KeyRetractor, Comparator>::GoToEnd(NodePtr& selector,
-                                                            char direction) {
+                                                            size_t direction) {
   for (; selector->relatives[direction];
        selector = selector->relatives[direction]) {
   }

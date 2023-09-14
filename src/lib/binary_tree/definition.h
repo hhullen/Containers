@@ -46,7 +46,7 @@ class BinTree {
    private:
     NodePtr node_ptr_, end_;
 
-    NodePtr MakeStep(NodePtr node, char direction);
+    NodePtr MakeStep(NodePtr node, size_t direction);
   };
   BinTree();
   ~BinTree();
@@ -65,7 +65,7 @@ class BinTree {
   NodePtr root_, end_;
   size_t size_;
 
-  static void GoToEnd(NodePtr& selector, char direction);
+  static void GoToEnd(NodePtr& selector, size_t direction);
   void SetNewNodeOnNull(NodePtrPair& found, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);

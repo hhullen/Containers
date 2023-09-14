@@ -23,8 +23,11 @@ void FillTree(hhullen::BinTree<Type>& tree, std::vector<Type> upload_data) {
 
 class TestClass {
  public:
-  TestClass() {}
-  bool operator<(const TestClass& src) const { return true; }
+  TestClass() : t{0} {}
+  bool operator<(const TestClass& src) const { return src.t == 0; }
+
+ private:
+  int t;
 };
 
 template <class T1>

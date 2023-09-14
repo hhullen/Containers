@@ -7,7 +7,8 @@ EXECUTABLE=$(MAIN_PROJ_NAME)_tests.out
 COMPILER=g++
 STD=--std=c++20
 CPP_FLAGS=-Wextra -Werror -Wpedantic -Wshadow \
-		  -Wconversion -Wnull-dereference -Wsign-conversion
+		  -Wconversion -Wnull-dereference -Wsign-conversion  \
+		  --all-warnings --extra-warnings
 TEST_FLAGS=-lgtest -pthread -lgtest_main
 GCOV_FLAG=--coverage
 EXTENSION=--extensions=cc

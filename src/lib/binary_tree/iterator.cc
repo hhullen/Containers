@@ -106,7 +106,7 @@ bool BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator!=(
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::NodePtr
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::MakeStep(
-    NodePtr node, char direction) {
+    NodePtr node, size_t direction) {
   return node->relatives[direction];
 }
 
