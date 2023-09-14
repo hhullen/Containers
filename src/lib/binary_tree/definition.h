@@ -28,7 +28,7 @@ class BinTree {
   struct Node {
     ~Node() {}
     Value value;
-    enum Relatives : char { Left = 0, Right, Parent };
+    enum Relatives { Left = 0, Right, Parent };
     NodePtr relatives[3];
   };
   class Iterator {
@@ -46,7 +46,7 @@ class BinTree {
    private:
     NodePtr node_ptr_, end_;
 
-    NodePtr MakeStep(NodePtr node, size_t direction);
+    // NodePtr MakeStep(NodePtr node, size_t direction);
   };
   BinTree();
   ~BinTree();
@@ -65,11 +65,15 @@ class BinTree {
   NodePtr root_, end_;
   size_t size_;
 
-  static void GoToEnd(NodePtr& selector, size_t direction);
   void SetNewNodeOnNull(NodePtrPair& found, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
+  void DeleteWithNoLeftChild(NodePtr& node);
+  void DeleteWithNoRightChild(NodePtr& node);
+
   static bool IsEQ(const Key& key1, const Key& key2);
+  static NodePtr MakeStep(NodePtr node, size_t direction);
+  static void GoToEnd(NodePtr& selector, size_t direction);
 };
 
 }  // namespace hhullen

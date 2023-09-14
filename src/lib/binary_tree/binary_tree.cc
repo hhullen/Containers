@@ -14,7 +14,7 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
 BinTree<Value, Key, KeyRetractor, Comparator>::Begin() {
   if (root_ != end_) {
     NodePtr selector = root_;
-    GoToEnd(selector, Node::Relatives::Left);
+    GoToEnd(selector, Node::Left);
     return Iterator(selector, end_);
   } else {
     return Iterator(end_, end_);
@@ -82,7 +82,12 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Delete(const Key& key) {
     return Iterator(end_, end_);
   }
   Iterator next = ++Iterator(found, end_);
-
+  if (!found->relatives[Node::Left]) {
+    DeleteWithNoLeftChild(found);
+  } else if (!found->relatives[Node::Right]) {
+    DeleteWithNoRightChild(found);
+  } else {
+  }
   return next;
 }
 
@@ -96,20 +101,12 @@ size_t BinTree<Value, Key, KeyRetractor, Comparator>::Size() {
 // */
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
-void BinTree<Value, Key, KeyRetractor, Comparator>::GoToEnd(NodePtr& selector,
-                                                            size_t direction) {
-  for (; selector->relatives[direction];
-       selector = selector->relatives[direction]) {
-  }
-}
-
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
 void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnEnd(
     NodePtr& node, const Value& value) {
   node->value = value;
-  node->relatives[Node::Relatives::Right].reset(new Node());
-  end_ = node->relatives[Node::Relatives::Right];
-  end_->relatives[Node::Relatives::Parent].reset(node.get(), [this](Node*) {});
+  node->relatives[Node::Right].reset(new Node());
+  end_ = node->relatives[Node::Right];
+  end_->relatives[Node::Parent].reset(node.get(), [this](Node*) {});
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -122,8 +119,8 @@ void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnNull(
   found.second = found.first->relatives[relative_selector];
 
   found.second->value = value;
-  found.second->relatives[Node::Relatives::Parent].reset(found.first.get(),
-                                                         [this](Node*) {});
+  found.second->relatives[Node::Parent].reset(found.first.get(),
+                                              [this](Node*) {});
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -142,9 +139,48 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Seek(const Key& key) {
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
+void BinTree<Value, Key, KeyRetractor, Comparator>::DeleteWithNoLeftChild(
+    NodePtr& node) {
+  node->value = node->relatives[Node::Right]->value;
+  node->relatives[Node::Left] =
+      node->relatives[Node::Right]->relatives[Node::Left];
+  node->relatives[Node::Right] =
+      node->relatives[Node::Right]->relatives[Node::Right];
+}
+
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+void BinTree<Value, Key, KeyRetractor, Comparator>::DeleteWithNoRightChild(
+    NodePtr& node) {
+  node->value = node->relatives[Node::Left]->value;
+  node->relatives[Node::Right] =
+      node->relatives[Node::Left]->relatives[Node::Right];
+  node->relatives[Node::Left] =
+      node->relatives[Node::Left]->relatives[Node::Left];
+}
+
+// /*
+//     private static methods
+// */
+
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
 bool BinTree<Value, Key, KeyRetractor, Comparator>::IsEQ(const Key& key1,
                                                          const Key& key2) {
   return !(Comparator()(key1, key2) || Comparator()(key2, key1));
+}
+
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+BinTree<Value, Key, KeyRetractor, Comparator>::NodePtr
+BinTree<Value, Key, KeyRetractor, Comparator>::MakeStep(NodePtr node,
+                                                        size_t direction) {
+  return node->relatives[direction];
+}
+
+template <class Value, comparable Key, class KeyRetractor, class Comparator>
+void BinTree<Value, Key, KeyRetractor, Comparator>::GoToEnd(NodePtr& selector,
+                                                            size_t direction) {
+  for (; selector->relatives[direction];
+       selector = selector->relatives[direction]) {
+  }
 }
 
 }  // namespace hhullen

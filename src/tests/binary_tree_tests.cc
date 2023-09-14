@@ -5,9 +5,10 @@
 
 std::vector<double> data_upload_1{1,    0.9,  1.1,  0.8,   0.91, 1.05,
                                   1.2,  0.7,  0.82, 0.905, 0.92, 1.04,
-                                  1.06, 1.15, 1.3,  0.75};
-std::vector<double> data_result_1{0.7, 0.75, 0.8,  0.82, 0.9, 0.905, 0.91, 0.92,
-                                  1,   1.04, 1.05, 1.06, 1.1, 1.15,  1.2,  1.3};
+                                  1.06, 1.15, 1.3,  0.75,  0.81};
+std::vector<double> data_result_1{0.7,   0.75, 0.8,  0.81, 0.82, 0.9,
+                                  0.905, 0.91, 0.92, 1,    1.04, 1.05,
+                                  1.06,  1.1,  1.15, 1.2,  1.3};
 
 std::vector<double> data_upload_2{-1, -2, -3, -4, -5, -6, -7, -8, -9, 9,
                                   8,  7,  6,  5,  4,  3,  2,  1,  0};
@@ -237,7 +238,7 @@ TEST(BinTree, Emplace_full_directions) {
   EXPECT_EQ(iter, tree.End());
   iter = tree.Find(0.906);
   EXPECT_EQ(iter, tree.End());
-  EXPECT_EQ(tree.Size(), 16);
+  EXPECT_EQ(tree.Size(), data_upload_1.size());
   ++iter;
 }
 
@@ -250,6 +251,26 @@ TEST(BinTree, Delete_not_existed) {
   EXPECT_TRUE(iter == tree.End());
   iter = tree.Delete(0.0001);
   EXPECT_TRUE(iter == tree.End());
+}
+
+TEST(BinTree, Delete_with_R_child) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
+
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Delete(0.7);
+  EXPECT_EQ(*iter, 0.75);
+  iter = tree.Delete(1.3);
+  EXPECT_TRUE(iter == tree.End());
+}
+
+TEST(BinTree, Delete_with_L_child) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
+
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Delete(0.82);
+  EXPECT_EQ(*iter, 0.9);
 }
 
 TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {
