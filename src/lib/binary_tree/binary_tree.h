@@ -63,7 +63,7 @@ class BinTree {
   NodePtr root_, end_;
   size_t size_;
 
-  void SetNewNodeOnNull(NodePtrPair& found, const Value& value);
+  void SetNewNodeOnNull(NodePtrPair& nodes_pair, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
   void DeleteWithNoLeftChild(NodePtr& node);

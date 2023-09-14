@@ -115,16 +115,16 @@ void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnEnd(
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnNull(
-    NodePtrPair& found, const Value& value) {
-  bool relative_selector =
-      Comparator()(KeyRetractor()(found.first->value), KeyRetractor()(value));
+    NodePtrPair& nodes_pair, const Value& value) {
+  bool relative_selector = Comparator()(KeyRetractor()(nodes_pair.first->value),
+                                        KeyRetractor()(value));
 
-  found.first->relatives[relative_selector].reset(new Node());
-  found.second = found.first->relatives[relative_selector];
+  nodes_pair.first->relatives[relative_selector].reset(new Node());
+  nodes_pair.second = nodes_pair.first->relatives[relative_selector];
 
-  found.second->value = value;
-  found.second->relatives[Node::Parent].reset(found.first.get(),
-                                              [this](Node*) {});
+  nodes_pair.second->value = value;
+  nodes_pair.second->relatives[Node::Parent].reset(nodes_pair.first.get(),
+                                                   [this](Node*) {});
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
