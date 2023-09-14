@@ -53,12 +53,12 @@ bool BinTree<Value, Key, KeyRetractor, Comparator>::Empty() {
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
 BinTree<Value, Key, KeyRetractor, Comparator>::Find(const Key& key) {
-  NodePtrPair found = Seek(key);
-  if (!found.second) {
-    found.second = end_;
+  NodePtr found = Seek(key).second;
+  if (!found) {
+    found = end_;
   }
-  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(
-      found.second.get(), end_.get());
+  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(found.get(),
+                                                                 end_.get());
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
