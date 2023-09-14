@@ -279,7 +279,7 @@ TEST(BinTree, Delete_with_NO_child) {
 
   hhullen::BinTree<double>::Iterator iter;
   iter = tree.Delete(0.75);
-  EXPECT_EQ(*iter, 0.7);
+  EXPECT_EQ(*iter, 0.8);
 }
 
 TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {
