@@ -82,7 +82,9 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Delete(const Key& key) {
     return Iterator(end_, end_);
   }
   Iterator next = ++Iterator(found, end_);
-  if (!found->relatives[Node::Left]) {
+  if (!found->relatives[Node::Left] && !found->relatives[Node::Right]) {
+    found.reset();
+  } else if (!found->relatives[Node::Left]) {
     DeleteWithNoLeftChild(found);
   } else if (!found->relatives[Node::Right]) {
     DeleteWithNoRightChild(found);

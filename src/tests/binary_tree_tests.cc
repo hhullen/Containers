@@ -273,6 +273,15 @@ TEST(BinTree, Delete_with_L_child) {
   EXPECT_EQ(*iter, 0.9);
 }
 
+TEST(BinTree, Delete_with_NO_child) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
+
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Delete(0.75);
+  EXPECT_EQ(*iter, 0.7);
+}
+
 TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {
   hhullen::BinTree<double> tree;
   FillTree(tree, data_upload_1);
