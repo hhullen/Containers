@@ -33,11 +33,11 @@ class TestRetractor {
   const T1& operator()(const T1& value) const { return value; }
 };
 
-// TEST(BinTree, Constructor) {
-//   hhullen::BinTree<TestClass> tree1;
-//   hhullen::BinTree<int, int, TestRetractor<int>> tree2;
-//   hhullen::BinTree<char, float> tree3;
-// }
+TEST(BinTree, Constructor) {
+  hhullen::BinTree<TestClass> tree1;
+  hhullen::BinTree<int, int, TestRetractor<int>> tree2;
+  hhullen::BinTree<char, float> tree3;
+}
 
 TEST(BinTree, Begin_empty) {
   hhullen::BinTree<int> tree;
@@ -47,35 +47,35 @@ TEST(BinTree, Begin_empty) {
 TEST(BinTree, Begin_) {
   hhullen::BinTree<double> tree;
   tree.Emplace(0.7);
-  // FillTree(tree, data_upload_1);
-  // EXPECT_EQ(*(tree.Begin()), 0.7);
+  FillTree(tree, data_upload_1);
+  EXPECT_EQ(*(tree.Begin()), 0.7);
 }
 
-// TEST(BinTree, End_empty) {
-//   hhullen::BinTree<int> tree;
-//   EXPECT_TRUE(tree.Begin() == tree.End());
-// }
+TEST(BinTree, End_empty) {
+  hhullen::BinTree<int> tree;
+  EXPECT_TRUE(tree.Begin() == tree.End());
+}
 
-// TEST(BinTree, Clear_empty) {
-//   hhullen::BinTree<int> tree;
-//   EXPECT_NO_THROW(tree.Clear());
-// }
+TEST(BinTree, Clear_empty) {
+  hhullen::BinTree<int> tree;
+  EXPECT_NO_THROW(tree.Clear());
+}
 
-// TEST(BinTree, Contains_empty) {
-//   hhullen::BinTree<int> tree;
-//   int test_v;
-//   EXPECT_FALSE(tree.Contains(test_v));
-// }
+TEST(BinTree, Contains_empty) {
+  hhullen::BinTree<int> tree;
+  int test_v;
+  EXPECT_FALSE(tree.Contains(test_v));
+}
 
-// TEST(BinTree, Empty_empty) {
-//   hhullen::BinTree<int> tree;
-//   EXPECT_TRUE(tree.Empty());
-// }
+TEST(BinTree, Empty_empty) {
+  hhullen::BinTree<int> tree;
+  EXPECT_TRUE(tree.Empty());
+}
 
-// TEST(BinTree, Find_empty) {
-//   hhullen::BinTree<int, double> tree;
-//   EXPECT_TRUE(tree.Find(0.21) == tree.End());
-// }
+TEST(BinTree, Find_empty) {
+  hhullen::BinTree<int, double> tree;
+  EXPECT_TRUE(tree.Find(0.21) == tree.End());
+}
 
 // // struct Aboba {
 // //   bool a : 1, b : 1, c : 1, d : 1, e : 1, f : 1, g : 1, h : 1;
@@ -147,234 +147,230 @@ TEST(BinTree, Begin_) {
 // //   return out << '}';
 // // }
 
-// TEST(BinTree, Emplace_simple) {
-//   hhullen::BinTree<double> tree;
-//   tree.Emplace(1);
-//   tree.Emplace(0.5);
-//   tree.Emplace(1.5);
-//   tree.Emplace(1.6);
-//   tree.Emplace(0.4);
-//   hhullen::BinTree<double>::Iterator iter;
-//   iter = tree.Find(1);
-//   EXPECT_EQ(*iter, 1);
-//   iter = tree.Find(0.5);
-//   EXPECT_EQ(*iter, 0.5);
-//   iter = tree.Find(1.5);
-//   EXPECT_EQ(*iter, 1.5);
-//   iter = tree.Find(1.6);
-//   EXPECT_EQ(*iter, 1.6);
-//   iter = tree.Find(0.4);
-//   EXPECT_EQ(*iter, 0.4);
-//   iter = tree.Find(10);
-//   EXPECT_EQ(iter, tree.End());
-//   EXPECT_EQ(tree.Size(), 5);
-// }
+TEST(BinTree, Emplace_simple) {
+  hhullen::BinTree<double> tree;
+  tree.Emplace(1);
+  tree.Emplace(0.5);
+  tree.Emplace(1.5);
+  tree.Emplace(1.6);
+  tree.Emplace(0.4);
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Find(1);
+  EXPECT_EQ(*iter, 1);
+  iter = tree.Find(0.5);
+  EXPECT_EQ(*iter, 0.5);
+  iter = tree.Find(1.5);
+  EXPECT_EQ(*iter, 1.5);
+  iter = tree.Find(1.6);
+  EXPECT_EQ(*iter, 1.6);
+  iter = tree.Find(0.4);
+  EXPECT_EQ(*iter, 0.4);
+  iter = tree.Find(10);
+  EXPECT_EQ(iter, tree.End());
+  EXPECT_EQ(tree.Size(), 5);
+}
 
-// TEST(BinTree, Emplace_full_directions) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree, Emplace_full_directions) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   tree.Emplace(1);
+  tree.Emplace(1);
 
-//   tree.Emplace(0.9);
-//   tree.Emplace(1.1);
+  tree.Emplace(0.9);
+  tree.Emplace(1.1);
 
-//   tree.Emplace(0.8);
-//   tree.Emplace(0.91);
-//   tree.Emplace(1.05);
-//   tree.Emplace(1.2);
+  tree.Emplace(0.8);
+  tree.Emplace(0.91);
+  tree.Emplace(1.05);
+  tree.Emplace(1.2);
 
-//   tree.Emplace(0.7);
-//   tree.Emplace(0.82);
-//   tree.Emplace(0.905);
-//   tree.Emplace(0.92);
-//   tree.Emplace(1.04);
-//   tree.Emplace(1.06);
-//   tree.Emplace(1.15);
-//   tree.Emplace(1.3);
+  tree.Emplace(0.7);
+  tree.Emplace(0.82);
+  tree.Emplace(0.905);
+  tree.Emplace(0.92);
+  tree.Emplace(1.04);
+  tree.Emplace(1.06);
+  tree.Emplace(1.15);
+  tree.Emplace(1.3);
 
-//   hhullen::BinTree<double>::Iterator iter;
-//   iter = tree.Find(1);
-//   EXPECT_EQ(*iter, 1);
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Find(1);
+  EXPECT_EQ(*iter, 1);
 
-//   iter = tree.Find(0.9);
-//   EXPECT_EQ(*iter, 0.9);
-//   iter = tree.Find(1.1);
-//   EXPECT_EQ(*iter, 1.1);
+  iter = tree.Find(0.9);
+  EXPECT_EQ(*iter, 0.9);
+  iter = tree.Find(1.1);
+  EXPECT_EQ(*iter, 1.1);
 
-//   iter = tree.Find(0.8);
-//   EXPECT_EQ(*iter, 0.8);
-//   iter = tree.Find(0.91);
-//   EXPECT_EQ(*iter, 0.91);
-//   iter = tree.Find(1.05);
-//   EXPECT_EQ(*iter, 1.05);
-//   iter = tree.Find(1.2);
-//   EXPECT_EQ(*iter, 1.2);
+  iter = tree.Find(0.8);
+  EXPECT_EQ(*iter, 0.8);
+  iter = tree.Find(0.91);
+  EXPECT_EQ(*iter, 0.91);
+  iter = tree.Find(1.05);
+  EXPECT_EQ(*iter, 1.05);
+  iter = tree.Find(1.2);
+  EXPECT_EQ(*iter, 1.2);
 
-//   iter = tree.Find(0.7);
-//   EXPECT_EQ(*iter, 0.7);
-//   iter = tree.Find(0.82);
-//   EXPECT_EQ(*iter, 0.82);
-//   iter = tree.Find(0.905);
-//   EXPECT_EQ(*iter, 0.905);
-//   iter = tree.Find(0.92);
-//   EXPECT_EQ(*iter, 0.92);
-//   iter = tree.Find(1.04);
-//   EXPECT_EQ(*iter, 1.04);
-//   iter = tree.Find(1.06);
-//   EXPECT_EQ(*iter, 1.06);
-//   iter = tree.Find(1.15);
-//   EXPECT_EQ(*iter, 1.15);
-//   iter = tree.Find(1.3);
-//   EXPECT_EQ(*iter, 1.3);
+  iter = tree.Find(0.7);
+  EXPECT_EQ(*iter, 0.7);
+  iter = tree.Find(0.82);
+  EXPECT_EQ(*iter, 0.82);
+  iter = tree.Find(0.905);
+  EXPECT_EQ(*iter, 0.905);
+  iter = tree.Find(0.92);
+  EXPECT_EQ(*iter, 0.92);
+  iter = tree.Find(1.04);
+  EXPECT_EQ(*iter, 1.04);
+  iter = tree.Find(1.06);
+  EXPECT_EQ(*iter, 1.06);
+  iter = tree.Find(1.15);
+  EXPECT_EQ(*iter, 1.15);
+  iter = tree.Find(1.3);
+  EXPECT_EQ(*iter, 1.3);
 
-//   iter = tree.Find(10);
-//   EXPECT_EQ(iter, tree.End());
-//   iter = tree.Find(-2);
-//   EXPECT_EQ(iter, tree.End());
-//   iter = tree.Find(0.906);
-//   EXPECT_EQ(iter, tree.End());
-//   EXPECT_EQ(tree.Size(), 16);
-//   ++iter;
-// }
+  iter = tree.Find(10);
+  EXPECT_EQ(iter, tree.End());
+  iter = tree.Find(-2);
+  EXPECT_EQ(iter, tree.End());
+  iter = tree.Find(0.906);
+  EXPECT_EQ(iter, tree.End());
+  EXPECT_EQ(tree.Size(), 16);
+  ++iter;
+}
 
-// TEST(BinTree, Delete_not_existed) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree, Delete_not_existed) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   hhullen::BinTree<double>::Iterator iter;
-//   iter = tree.Delete(999);
-//   EXPECT_TRUE(iter == tree.End());
-//   iter = tree.Delete(0.0001);
-//   EXPECT_TRUE(iter == tree.End());
-// }
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Delete(999);
+  EXPECT_TRUE(iter == tree.End());
+  iter = tree.Delete(0.0001);
+  EXPECT_TRUE(iter == tree.End());
+}
 
-// TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.Begin();
-//   for (size_t i = 0; iter != tree.End(); ++iter, ++i) {
-//     EXPECT_EQ(data_result_1.at(i), *iter);
-//   }
-//   EXPECT_TRUE(iter == tree.End());
-//   ++iter;
-//   EXPECT_TRUE(iter == tree.End());
-//   ++iter;
-//   EXPECT_TRUE(iter == tree.End());
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.Begin();
+  for (size_t i = 0; iter != tree.End(); ++iter, ++i) {
+    EXPECT_EQ(data_result_1.at(i), *iter);
+  }
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
+}
 
-// TEST(BinTree_Iterator, Iterator_prefix_INcrement_2) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_2);
+TEST(BinTree_Iterator, Iterator_prefix_INcrement_2) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_2);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.Begin();
-//   for (size_t i = 0; iter != tree.End(); ++iter, ++i) {
-//     EXPECT_EQ(data_result_2.at(i), *iter);
-//   }
-//   EXPECT_TRUE(iter == tree.End());
-//   ++iter;
-//   EXPECT_TRUE(iter == tree.End());
-//   ++iter;
-//   EXPECT_TRUE(iter == tree.End());
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.Begin();
+  for (size_t i = 0; iter != tree.End(); ++iter, ++i) {
+    EXPECT_EQ(data_result_2.at(i), *iter);
+  }
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
+  ++iter;
+  EXPECT_TRUE(iter == tree.End());
+}
 
-// TEST(BinTree_Iterator, Iterator_postfix_INcrement_1) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree_Iterator, Iterator_postfix_INcrement_1) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.Begin();
-//   for (size_t i = 0; iter != tree.End(); iter++, ++i) {
-//     EXPECT_EQ(data_result_1.at(i), *iter);
-//   }
-//   EXPECT_TRUE(iter == tree.End());
-//   iter++;
-//   EXPECT_TRUE(iter == tree.End());
-//   iter++;
-//   EXPECT_TRUE(iter == tree.End());
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.Begin();
+  for (size_t i = 0; iter != tree.End(); iter++, ++i) {
+    EXPECT_EQ(data_result_1.at(i), *iter);
+  }
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
+}
 
-// TEST(BinTree_Iterator, Iterator_postfix_INcrement_2) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_2);
+TEST(BinTree_Iterator, Iterator_postfix_INcrement_2) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_2);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.Begin();
-//   for (size_t i = 0; iter != tree.End(); iter++, ++i) {
-//     EXPECT_EQ(data_result_2.at(i), *iter);
-//   }
-//   EXPECT_TRUE(iter == tree.End());
-//   iter++;
-//   EXPECT_TRUE(iter == tree.End());
-//   iter++;
-//   EXPECT_TRUE(iter == tree.End());
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.Begin();
+  for (size_t i = 0; iter != tree.End(); iter++, ++i) {
+    EXPECT_EQ(data_result_2.at(i), *iter);
+  }
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
+  iter++;
+  EXPECT_TRUE(iter == tree.End());
+}
 
-// TEST(BinTree_Iterator, Iterator_prefix_DEcrement_1) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree_Iterator, Iterator_prefix_DEcrement_1) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   --iter;
-//   for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); --iter,
-//   --i) {
-//     EXPECT_EQ(data_result_1.at(i), *iter);
-//   }
-//   EXPECT_EQ(data_result_1.at(0), *iter);
-//   --iter;
-//   EXPECT_TRUE(iter == tree.Begin());
-//   --iter;
-//   EXPECT_TRUE(iter == tree.Begin());
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  --iter;
+  for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); --iter, --i) {
+    EXPECT_EQ(data_result_1.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_1.at(0), *iter);
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
+}
 
-// TEST(BinTree_Iterator, Iterator_prefix_DEcrement_2) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_2);
+TEST(BinTree_Iterator, Iterator_prefix_DEcrement_2) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_2);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   --iter;
-//   for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); --iter,
-//   --i) {
-//     EXPECT_EQ(data_result_2.at(i), *iter);
-//   }
-//   EXPECT_EQ(data_result_2.at(0), *iter);
-//   --iter;
-//   EXPECT_TRUE(iter == tree.Begin());
-//   --iter;
-//   EXPECT_TRUE(iter == tree.Begin());
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  --iter;
+  for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); --iter, --i) {
+    EXPECT_EQ(data_result_2.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_2.at(0), *iter);
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
+  --iter;
+  EXPECT_TRUE(iter == tree.Begin());
+}
 
-// TEST(BinTree_Iterator, Iterator_postfix_DEcrement_1) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_1);
+TEST(BinTree_Iterator, Iterator_postfix_DEcrement_1) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   iter--;
-//   for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); iter--,
-//   --i) {
-//     EXPECT_EQ(data_result_1.at(i), *iter);
-//   }
-//   EXPECT_EQ(data_result_1.at(0), *iter);
-//   iter--;
-//   EXPECT_TRUE(iter == tree.Begin());
-//   iter--;
-//   EXPECT_TRUE(iter == tree.Begin());
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  iter--;
+  for (size_t i = data_result_1.size() - 1; iter != tree.Begin(); iter--, --i) {
+    EXPECT_EQ(data_result_1.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_1.at(0), *iter);
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
+}
 
-// TEST(BinTree_Iterator, Iterator_postfix_DEcrement_2) {
-//   // for (int j = 0; j < 100000; ++j) {
-//   hhullen::BinTree<double> tree;
-//   FillTree(tree, data_upload_2);
+TEST(BinTree_Iterator, Iterator_postfix_DEcrement_2) {
+  // for (int j = 0; j < 100000; ++j) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_2);
 
-//   hhullen::BinTree<double>::Iterator iter = tree.End();
-//   iter--;
-//   for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); iter--,
-//   --i) {
-//     EXPECT_EQ(data_result_2.at(i), *iter);
-//   }
-//   EXPECT_EQ(data_result_2.at(0), *iter);
-//   iter--;
-//   EXPECT_TRUE(iter == tree.Begin());
-//   iter--;
-//   EXPECT_TRUE(iter == tree.Begin());
-//   // }
-// }
+  hhullen::BinTree<double>::Iterator iter = tree.End();
+  iter--;
+  for (size_t i = data_result_2.size() - 1; iter != tree.Begin(); iter--, --i) {
+    EXPECT_EQ(data_result_2.at(i), *iter);
+  }
+  EXPECT_EQ(data_result_2.at(0), *iter);
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
+  iter--;
+  EXPECT_TRUE(iter == tree.Begin());
+  // }
+}

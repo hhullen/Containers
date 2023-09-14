@@ -109,7 +109,7 @@ void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnEnd(
   node->value = value;
   node->relatives[Node::Relatives::Right].reset(new Node());
   end_ = node->relatives[Node::Relatives::Right];
-  end_->relatives[Node::Relatives::Parent] = node;
+  end_->relatives[Node::Relatives::Parent].reset(node.get(), [this](Node*) {});
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -122,7 +122,8 @@ void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnNull(
   found.second = found.first->relatives[relative_selector];
 
   found.second->value = value;
-  found.second->relatives[Node::Relatives::Parent] = found.first;
+  found.second->relatives[Node::Relatives::Parent].reset(found.first.get(),
+                                                         [this](Node*) {});
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>

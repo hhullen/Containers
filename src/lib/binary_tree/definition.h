@@ -26,7 +26,7 @@ class BinTree {
   using NodePtr = std::shared_ptr<Node>;
   using NodePtrPair = std::pair<NodePtr, NodePtr>;
   struct Node {
-    ~Node() { std::cout << value << "DISTRUCT\n"; }
+    ~Node() {}
     Value value;
     enum Relatives : char { Left = 0, Right, Parent };
     NodePtr relatives[3];
