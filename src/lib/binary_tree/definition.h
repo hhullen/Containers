@@ -26,14 +26,15 @@ class BinTree {
   using NodePtr = std::shared_ptr<Node>;
   using NodePtrPair = std::pair<NodePtr, NodePtr>;
   struct Node {
+    ~Node() { std::cout << value << "DISTRUCT\n"; }
     Value value;
     enum Relatives : char { Left = 0, Right, Parent };
     NodePtr relatives[3];
   };
-  class Iterator : public std::iterator<std::input_iterator_tag, Value> {
+  class Iterator {
    public:
     Iterator();
-    Iterator(Node* node, Node* end);
+    Iterator(NodePtr node, NodePtr end);
     Value operator*() const;
     Iterator& operator++();
     Iterator operator++(int);
@@ -43,9 +44,9 @@ class BinTree {
     bool operator!=(const Iterator& other) const;
 
    private:
-    Node *node_ptr_, *end_;
+    NodePtr node_ptr_, end_;
 
-    Node* MakeStep(Node* node, char direction);
+    NodePtr MakeStep(NodePtr node, char direction);
   };
   BinTree();
   ~BinTree();

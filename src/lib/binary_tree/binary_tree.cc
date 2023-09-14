@@ -15,19 +15,16 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Begin() {
   if (root_ != end_) {
     NodePtr selector = root_;
     GoToEnd(selector, Node::Relatives::Left);
-    return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(
-        selector.get(), end_.get());
+    return Iterator(selector, end_);
   } else {
-    return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(end_.get(),
-                                                                   end_.get());
+    return Iterator(end_, end_);
   }
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
 BinTree<Value, Key, KeyRetractor, Comparator>::End() {
-  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(end_.get(),
-                                                                 end_.get());
+  return Iterator(end_, end_);
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -57,38 +54,36 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Find(const Key& key) {
   if (!found) {
     found = end_;
   }
-  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(found.get(),
-                                                                 end_.get());
+  return Iterator(found, end_);
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
 BinTree<Value, Key, KeyRetractor, Comparator>::Emplace(const Value& value) {
-  const Key& key = KeyRetractor()(value);
+  const Key key = KeyRetractor()(value);
   NodePtrPair found = Seek(key);
   if (found.second == end_) {
     SetNewNodeOnEnd(found.second, value);
     ++size_;
   } else if (found.second) {
-    found.second.get()->value = value;
+    found.second->value = value;
   } else {
     SetNewNodeOnNull(found, value);
     ++size_;
   }
-  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(
-      found.second.get(), end_.get());
+  return Iterator(found.second, end_);
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
 BinTree<Value, Key, KeyRetractor, Comparator>::Delete(const Key& key) {
-  NodePtrPair found = Seek(key);
-  if (!found.second || found.second == end_) {
-    return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator(end_.get(),
-                                                                   end_.get());
+  NodePtr found = Seek(key).second;
+  if (!found || found == end_) {
+    return Iterator(end_, end_);
   }
+  Iterator next = ++Iterator(found, end_);
 
-  return BinTree<Value, Key, KeyRetractor, Comparator>::Iterator();
+  return next;
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -101,35 +96,33 @@ size_t BinTree<Value, Key, KeyRetractor, Comparator>::Size() {
 // */
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
-void BinTree<Value, Key, KeyRetractor, Comparator>::GoToEnd(
-    BinTree<Value, Key, KeyRetractor, Comparator>::NodePtr& selector,
-    char direction) {
-  for (; selector.get()->relatives[direction];
-       selector = selector.get()->relatives[direction]) {
+void BinTree<Value, Key, KeyRetractor, Comparator>::GoToEnd(NodePtr& selector,
+                                                            char direction) {
+  for (; selector->relatives[direction];
+       selector = selector->relatives[direction]) {
   }
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnEnd(
     NodePtr& node, const Value& value) {
-  node.get()->value = value;
-  node.get()->relatives[Node::Relatives::Right].reset(new Node());
-  end_ = node.get()->relatives[Node::Relatives::Right];
-  end_.get()->relatives[Node::Relatives::Parent] = node;
+  node->value = value;
+  node->relatives[Node::Relatives::Right].reset(new Node());
+  end_ = node->relatives[Node::Relatives::Right];
+  end_->relatives[Node::Relatives::Parent] = node;
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
 void BinTree<Value, Key, KeyRetractor, Comparator>::SetNewNodeOnNull(
-    BinTree<Value, Key, KeyRetractor, Comparator>::NodePtrPair& found,
-    const Value& value) {
-  bool relative_selector = Comparator()(
-      KeyRetractor()(found.first.get()->value), KeyRetractor()(value));
+    NodePtrPair& found, const Value& value) {
+  bool relative_selector =
+      Comparator()(KeyRetractor()(found.first->value), KeyRetractor()(value));
 
-  found.first.get()->relatives[relative_selector].reset(new Node());
-  found.second = found.first.get()->relatives[relative_selector];
+  found.first->relatives[relative_selector].reset(new Node());
+  found.second = found.first->relatives[relative_selector];
 
-  found.second.get()->value = value;
-  found.second.get()->relatives[Node::Relatives::Parent] = found.first;
+  found.second->value = value;
+  found.second->relatives[Node::Relatives::Parent] = found.first;
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -138,11 +131,11 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Seek(const Key& key) {
   NodePtr selector = root_, previous;
   for (; selector && selector != end_;) {
     previous = selector;
-    const Key& selected = KeyRetractor()(selector.get()->value);
+    const Key selected = KeyRetractor()(selector->value);
     if (IsEQ(key, selected)) {
       break;
     }
-    selector = selector.get()->relatives[Comparator()(selected, key)];
+    selector = selector->relatives[Comparator()(selected, key)];
   }
   return {previous, selector};
 }

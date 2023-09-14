@@ -7,8 +7,8 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::Iterator()
     : node_ptr_{nullptr}, end_{nullptr} {}
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::Iterator(Node* node,
-                                                                  Node* end)
+BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::Iterator(NodePtr node,
+                                                                  NodePtr end)
     : node_ptr_{node}, end_{end} {}
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
@@ -26,12 +26,12 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++() {
   NodePtr selector_right = node_ptr_->relatives[Node::Relatives::Right];
   if (selector_right) {
     GoToEnd(selector_right, Node::Relatives::Left);
-    node_ptr_ = selector_right.get();
+    node_ptr_ = selector_right;
   } else {
-    Node* right_of_parent = MakeStep(node_ptr_, Node::Relatives::Parent);
+    NodePtr right_of_parent = MakeStep(node_ptr_, Node::Relatives::Parent);
     right_of_parent = MakeStep(right_of_parent, Node::Relatives::Right);
     if (right_of_parent == node_ptr_) {
-      Node* parent_of_current = MakeStep(node_ptr_, Node::Relatives::Parent);
+      NodePtr parent_of_current = MakeStep(node_ptr_, Node::Relatives::Parent);
       for (; parent_of_current &&
              Comparator()(KeyRetractor()(parent_of_current->value),
                           KeyRetractor()(node_ptr_->value));
@@ -58,13 +58,13 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--() {
   NodePtr selector_left = node_ptr_->relatives[Node::Relatives::Left];
   if (selector_left) {
     GoToEnd(selector_left, Node::Relatives::Right);
-    node_ptr_ = selector_left.get();
+    node_ptr_ = selector_left;
   } else {
-    Node* current = node_ptr_;
-    Node* left_of_parent = MakeStep(current, Node::Relatives::Parent);
+    NodePtr current = node_ptr_;
+    NodePtr left_of_parent = MakeStep(current, Node::Relatives::Parent);
     left_of_parent = MakeStep(left_of_parent, Node::Relatives::Left);
     if (left_of_parent == current) {
-      Node* parent_of_current = MakeStep(current, Node::Relatives::Parent);
+      NodePtr parent_of_current = MakeStep(current, Node::Relatives::Parent);
       for (; parent_of_current &&
              Comparator()(KeyRetractor()(current->value),
                           KeyRetractor()(parent_of_current->value));
@@ -104,10 +104,10 @@ bool BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator!=(
 }
 
 template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Node*
+BinTree<Value, Key, KeyRetractor, Comparator>::NodePtr
 BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::MakeStep(
-    Node* node, char direction) {
-  return node->relatives[direction].get();
+    NodePtr node, char direction) {
+  return node->relatives[direction];
 }
 
 }  // namespace hhullen
