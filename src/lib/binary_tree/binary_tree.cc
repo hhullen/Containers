@@ -83,6 +83,7 @@ BIN_TREE_DEF::Iterator BIN_TREE_DEF::Delete(const Key& key) {
   } else {
     DeleteWithBothChilds(found);
   }
+  --size_;
   return next;
 }
 
@@ -153,9 +154,12 @@ void BIN_TREE_DEF::DeleteWithBothChilds(NodePtr& node) {
   NodePtr exchange_node = node->relatives[Node::Right];
   if (exchange_node->relatives[Node::Left]) {
     GoToEnd(exchange_node, Node::Left);
-    node->value = exchange_node->value;
     if (exchange_node->relatives[Node::Right]) {
+      node->value = exchange_node->value;
       PullToNodeFromRelative(exchange_node, Node::Right);
+    } else {
+      node->value = exchange_node->value;
+      exchange_node->relatives[Node::Parent]->relatives[Node::Left].reset();
     }
   } else {
     node->value = exchange_node->value;
