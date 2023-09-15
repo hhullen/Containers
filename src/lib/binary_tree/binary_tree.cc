@@ -77,12 +77,11 @@ BIN_TREE_DEF::Iterator BIN_TREE_DEF::Delete(const Key& key) {
   if (!found->relatives[Node::Left] && !found->relatives[Node::Right]) {
     DeleteWithNoChilds(found);
   } else if (!found->relatives[Node::Left]) {
-    // DeleteWithNoLeftChild(found);
-    PullToNodeFromRelative(node, Node::Right);
+    PullToNodeFromRelative(found, Node::Right);
   } else if (!found->relatives[Node::Right]) {
-    PullToNodeFromRelative(node, Node::Left);
-    // DeleteWithNoRightChild(found);
+    PullToNodeFromRelative(found, Node::Left);
   } else {
+    DeleteWithBothChilds(found);
   }
   return next;
 }
@@ -140,22 +139,6 @@ void BIN_TREE_DEF::PullToNodeFromRelative(NodePtr& node, size_t relative) {
 }
 
 TEMPLATE_DEF
-void BIN_TREE_DEF::DeleteWithNoLeftChild(NodePtr& node) {
-  NodePtr& node_right = node->relatives[Node::Right];
-  node->value = node_right->value;
-  node->relatives[Node::Left] = node_right->relatives[Node::Left];
-  node_right = node_right->relatives[Node::Right];
-}
-
-TEMPLATE_DEF
-void BIN_TREE_DEF::DeleteWithNoRightChild(NodePtr& node) {
-  NodePtr& node_left = node->relatives[Node::Left];
-  node->value = node_left->value;
-  node->relatives[Node::Right] = node_left->relatives[Node::Right];
-  node_left = node_left->relatives[Node::Left];
-}
-
-TEMPLATE_DEF
 void BIN_TREE_DEF::DeleteWithNoChilds(NodePtr& node) {
   NodePtr parent = node->relatives[Node::Parent];
   if (parent->relatives[Node::Left] == node) {
@@ -167,14 +150,20 @@ void BIN_TREE_DEF::DeleteWithNoChilds(NodePtr& node) {
 
 TEMPLATE_DEF
 void BIN_TREE_DEF::DeleteWithBothChilds(NodePtr& node) {
-  NodePtr child_right = node->relatives[Node::Right];
-  if (child_right->relatives[Node::Left]) {
-    for (; child_right->relatives[Node::Left];
-         child_right = child_right->relatives[Node::Left]) {
+  NodePtr exchange_node = node->relatives[Node::Right];
+  if (exchange_node->relatives[Node::Left]) {
+    GoToEnd(exchange_node, Node::Left);
+    node->value = exchange_node->value;
+    if (exchange_node->relatives[Node::Right]) {
+      PullToNodeFromRelative(exchange_node, Node::Right);
     }
-    node->value = child_right->value;
   } else {
-    // node->value = child_right->value;
+    node->value = exchange_node->value;
+    if (exchange_node->relatives[Node::Right]) {
+      exchange_node->relatives[Node::Right]->relatives[Node::Parent].reset(
+          node.get(), [this](Node*) {});
+    }
+    node->relatives[Node::Right] = exchange_node->relatives[Node::Right];
   }
 }
 

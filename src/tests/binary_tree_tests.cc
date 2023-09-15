@@ -81,76 +81,6 @@ TEST(BinTree, Find_empty) {
   EXPECT_TRUE(tree.Find(0.21) == tree.End());
 }
 
-// // struct Aboba {
-// //   bool a : 1, b : 1, c : 1, d : 1, e : 1, f : 1, g : 1, h : 1;
-// // };
-
-// // std::ostream& operator<<(std::ostream& out, const Aboba& aboba) {
-// //   out << aboba.a << aboba.b << aboba.c << aboba.d << aboba.e << aboba.f
-// //       << aboba.g << aboba.h;
-// //   return out;
-// // }
-
-// // template <class T>
-// // struct Node {
-// //   T* data;
-// //   Node *left, *right, *parent;
-// // };
-
-// // template <class Value, class Key, class KeyRetractor, class Comparator>
-// // class Tree {
-// //  private:
-// //   KeyRetractor ret_;
-// //   Comparator comp_;
-
-// //   void aboba(const Key& k) {
-// //     Value value;
-// //     comp_(k, ret_(value));
-// //   }
-// // };
-
-// // template <class T1, class T2>
-// // struct RetMap {
-// //   const T1& operator()(const std::pair<T1, T2>& t) const { return t.first;
-// }
-// // };
-
-// // template <class T, class Key>
-// // class map {
-// //   using tree = Tree<std::pair<const Key, T>, Key, RetMap, std::less<Key>>;
-// // };
-
-// // template <class T>
-// // struct Ret {
-// //   const T& operator()(const T& t) const { return t; }
-// // };
-
-// // template <class Key>
-// // class set {
-// //   using tree = Tree<const Key, Key, Ret, std::less<Key>>;
-// // };
-
-// // std::ostream& operator<<(std::ostream& out, const int& aboba) {
-// //   return out << "HUITA";
-// // }
-
-// // template <class T1, class T2>
-// // std::ostream& operator<<(std::ostream& out, const std::pair<T1, T2>& p) {
-// //   return out << '{' << p.first << ", " << p.second << '}';
-// // }
-
-// // template <class... Args>
-// // std::ostream& operator<<(std::ostream& out, const std::map<Args...>& m) {
-// //   out << '{';
-// //   bool comma = false;
-// //   for (const auto& el : m) {
-// //     if (comma) out << ", ";
-// //     comma = true;
-// //     out << el;
-// //   }
-// //   return out << '}';
-// // }
-
 TEST(BinTree, Emplace_simple) {
   hhullen::BinTree<double> tree;
   tree.Emplace(1);
@@ -260,8 +190,11 @@ TEST(BinTree, Delete_with_R_child) {
   hhullen::BinTree<double>::Iterator iter;
   iter = tree.Delete(0.7);
   EXPECT_EQ(*iter, 0.75);
+  EXPECT_TRUE(tree.Find(0.7) == tree.End());
+
   iter = tree.Delete(1.3);
   EXPECT_TRUE(iter == tree.End());
+  EXPECT_TRUE(tree.Find(1.3) == tree.End());
 }
 
 TEST(BinTree, Delete_with_L_child) {
@@ -271,6 +204,7 @@ TEST(BinTree, Delete_with_L_child) {
   hhullen::BinTree<double>::Iterator iter;
   iter = tree.Delete(0.82);
   EXPECT_EQ(*iter, 0.9);
+  EXPECT_TRUE(tree.Find(0.82) == tree.End());
 }
 
 TEST(BinTree, Delete_with_NO_child) {
@@ -280,8 +214,33 @@ TEST(BinTree, Delete_with_NO_child) {
   hhullen::BinTree<double>::Iterator iter;
   iter = tree.Delete(0.75);
   EXPECT_EQ(*iter, 0.8);
+  EXPECT_TRUE(tree.Find(0.75) == tree.End());
   iter = tree.Delete(0.7);
   EXPECT_EQ(*iter, 0.8);
+  EXPECT_TRUE(tree.Find(0.7) == tree.End());
+}
+
+TEST(BinTree, Delete_with_both_child_and_no_left_of_right_child) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
+
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Delete(1.05);
+  EXPECT_EQ(*iter, 1.06);
+  EXPECT_TRUE(tree.Find(1.05) == tree.End());
+}
+
+TEST(BinTree, Delete_with_both_child_and_left_of_right_child) {
+  hhullen::BinTree<double> tree;
+  FillTree(tree, data_upload_1);
+
+  hhullen::BinTree<double>::Iterator iter;
+  iter = tree.Delete(1.1);
+  EXPECT_EQ(*iter, 1.15);
+  EXPECT_TRUE(tree.Find(1.1) == tree.End());
+  iter = tree.Delete(1);
+  EXPECT_EQ(*iter, 1.04);
+  EXPECT_TRUE(tree.Find(1) == tree.End());
 }
 
 TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {

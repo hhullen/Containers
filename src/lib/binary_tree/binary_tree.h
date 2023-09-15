@@ -1,10 +1,6 @@
 #ifndef SRC_LIB_BINARY_TREE_DEFINITION_H_
 #define SRC_LIB_BINARY_TREE_DEFINITION_H_
 
-#define BIN_TREE_DEF BinTree<Value, Key, KeyRetractor, Comparator>
-#define TEMPLATE_DEF \
-  template <class Value, comparable Key, class KeyRetractor, class Comparator>
-
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -12,8 +8,9 @@
 
 namespace hhullen {
 
-template <class T>
-concept comparable = requires(T val) { val < val; };
+#define BIN_TREE_DEF BinTree<Value, Key, KeyRetractor, Comparator>
+#define TEMPLATE_DEF \
+  template <class Value, class Key, class KeyRetractor, class Comparator>
 
 template <class T1>
 class BinTreeKeyRetractor {
@@ -21,7 +18,7 @@ class BinTreeKeyRetractor {
   const T1& operator()(const T1& value) const { return value; }
 };
 
-template <class Value, comparable Key = Value,
+template <class Value, class Key = Value,
           class KeyRetractor = BinTreeKeyRetractor<Value>,
           class Comparator = std::less<Key>>
 class BinTree {
@@ -71,8 +68,6 @@ class BinTree {
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
   void PullToNodeFromRelative(NodePtr& node, size_t relative);
-  void DeleteWithNoLeftChild(NodePtr& node);
-  void DeleteWithNoRightChild(NodePtr& node);
   void DeleteWithNoChilds(NodePtr& node);
   void DeleteWithBothChilds(NodePtr& node);
 
