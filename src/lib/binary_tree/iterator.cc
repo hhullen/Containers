@@ -1,27 +1,21 @@
 #ifndef SRC_LIB_BINARY_TREE_DEFINITION_H_
-#include "definition.h"
+#include "binary_tree.h"
 #endif  // SRC_LIB_BINARY_TREE_DEFINITION_H_
 
 namespace hhullen {
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::Iterator()
-    : node_ptr_{nullptr}, end_{nullptr} {}
+TEMPLATE_DEF
+BIN_TREE_DEF::Iterator::Iterator() : node_ptr_{nullptr}, end_{nullptr} {}
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::Iterator(NodePtr node,
-                                                                  NodePtr end)
+TEMPLATE_DEF
+BIN_TREE_DEF::Iterator::Iterator(NodePtr node, NodePtr end)
     : node_ptr_{node}, end_{end} {}
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-Value BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator*()
-    const {
-  return node_ptr_->value;
-}
+TEMPLATE_DEF
+Value BIN_TREE_DEF::Iterator::operator*() const { return node_ptr_->value; }
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator&
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++() {
+TEMPLATE_DEF
+BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator++() {
   if (node_ptr_ == end_) {
     return *this;
   }
@@ -46,17 +40,15 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++() {
   return *this;
 }
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator++(int) {
-  BinTree<Value, Key, KeyRetractor, Comparator>::Iterator iter(*this);
+TEMPLATE_DEF
+BIN_TREE_DEF::Iterator BIN_TREE_DEF::Iterator::operator++(int) {
+  BIN_TREE_DEF::Iterator iter(*this);
   ++(*this);
   return iter;
 }
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator&
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--() {
+TEMPLATE_DEF
+BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator--() {
   NodePtr selector_left = node_ptr_->relatives[Node::Left];
   if (selector_left) {
     GoToEnd(selector_left, Node::Right);
@@ -83,25 +75,22 @@ BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--() {
   return *this;
 }
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator
-BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator--(int) {
-  BinTree<Value, Key, KeyRetractor, Comparator>::Iterator iter(*this);
+TEMPLATE_DEF
+BIN_TREE_DEF::Iterator BIN_TREE_DEF::Iterator::operator--(int) {
+  BIN_TREE_DEF::Iterator iter(*this);
   --(*this);
   return iter;
 }
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-bool BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator==(
-    const BinTree<Value, Key, KeyRetractor, Comparator>::Iterator& other)
-    const {
+TEMPLATE_DEF
+bool BIN_TREE_DEF::Iterator::operator==(
+    const BIN_TREE_DEF::Iterator& other) const {
   return node_ptr_ == other.node_ptr_;
 }
 
-template <class Value, comparable Key, class KeyRetractor, class Comparator>
-bool BinTree<Value, Key, KeyRetractor, Comparator>::Iterator::operator!=(
-    const BinTree<Value, Key, KeyRetractor, Comparator>::Iterator& other)
-    const {
+TEMPLATE_DEF
+bool BIN_TREE_DEF::Iterator::operator!=(
+    const BIN_TREE_DEF::Iterator& other) const {
   return node_ptr_ != other.node_ptr_;
 }
 

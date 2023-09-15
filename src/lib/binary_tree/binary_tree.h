@@ -1,6 +1,10 @@
 #ifndef SRC_LIB_BINARY_TREE_DEFINITION_H_
 #define SRC_LIB_BINARY_TREE_DEFINITION_H_
 
+#define BIN_TREE_DEF BinTree<Value, Key, KeyRetractor, Comparator>
+#define TEMPLATE_DEF \
+  template <class Value, comparable Key, class KeyRetractor, class Comparator>
+
 #include <functional>
 #include <iostream>
 #include <memory>
