@@ -77,9 +77,11 @@ BIN_TREE_DEF::Iterator BIN_TREE_DEF::Delete(const Key& key) {
   if (!found->relatives[Node::Left] && !found->relatives[Node::Right]) {
     DeleteWithNoChilds(found);
   } else if (!found->relatives[Node::Left]) {
-    DeleteWithNoLeftChild(found);
+    // DeleteWithNoLeftChild(found);
+    PullToNodeFromRelative(node, Node::Right);
   } else if (!found->relatives[Node::Right]) {
-    DeleteWithNoRightChild(found);
+    PullToNodeFromRelative(node, Node::Left);
+    // DeleteWithNoRightChild(found);
   } else {
   }
   return next;
@@ -110,7 +112,6 @@ void BIN_TREE_DEF::SetNewNodeOnNull(NodePtrPair& nodes_pair,
 
   node_prev->relatives[relative_selector].reset(new Node());
   node_curr = node_prev->relatives[relative_selector];
-
   node_curr->value = value;
   node_curr->relatives[Node::Parent].reset(node_prev.get(), [this](Node*) {});
 }
@@ -120,13 +121,22 @@ BIN_TREE_DEF::NodePtrPair BIN_TREE_DEF::Seek(const Key& key) {
   NodePtr selector = root_, previous;
   for (; selector && selector != end_;) {
     previous = selector;
-    const Key selected = KeyRetractor()(selector->value);
-    if (IsEQ(key, selected)) {
+    const Key selected_key = KeyRetractor()(selector->value);
+    if (IsEQ(key, selected_key)) {
       break;
     }
-    selector = selector->relatives[Comparator()(selected, key)];
+    selector = selector->relatives[Comparator()(selected_key, key)];
   }
   return {previous, selector};
+}
+
+TEMPLATE_DEF
+void BIN_TREE_DEF::PullToNodeFromRelative(NodePtr& node, size_t relative) {
+  size_t second_relative = !relative;
+  node->value = node->relatives[relative]->value;
+  node->relatives[second_relative] =
+      node->relatives[relative]->relatives[second_relative];
+  node->relatives[relative] = node->relatives[relative]->relatives[relative];
 }
 
 TEMPLATE_DEF
@@ -152,6 +162,19 @@ void BIN_TREE_DEF::DeleteWithNoChilds(NodePtr& node) {
     parent->relatives[Node::Left].reset();
   } else {
     parent->relatives[Node::Right].reset();
+  }
+}
+
+TEMPLATE_DEF
+void BIN_TREE_DEF::DeleteWithBothChilds(NodePtr& node) {
+  NodePtr child_right = node->relatives[Node::Right];
+  if (child_right->relatives[Node::Left]) {
+    for (; child_right->relatives[Node::Left];
+         child_right = child_right->relatives[Node::Left]) {
+    }
+    node->value = child_right->value;
+  } else {
+    // node->value = child_right->value;
   }
 }
 

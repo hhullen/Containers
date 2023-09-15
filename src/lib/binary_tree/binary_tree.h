@@ -32,7 +32,7 @@ class BinTree {
   struct Node {
     ~Node() {}
     Value value;
-    enum Relatives { Left = 0, Right, Parent };
+    enum Relatives : size_t { Left = 0, Right, Parent };
     NodePtr relatives[3];
   };
   class Iterator {
@@ -70,9 +70,11 @@ class BinTree {
   void SetNewNodeOnNull(NodePtrPair& nodes_pair, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
+  void PullToNodeFromRelative(NodePtr& node, size_t relative);
   void DeleteWithNoLeftChild(NodePtr& node);
   void DeleteWithNoRightChild(NodePtr& node);
   void DeleteWithNoChilds(NodePtr& node);
+  void DeleteWithBothChilds(NodePtr& node);
 
   static bool IsEQ(const Key& key1, const Key& key2);
   static NodePtr MakeStep(const NodePtr& node, size_t direction);
