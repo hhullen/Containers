@@ -149,7 +149,6 @@ void BIN_TREE_DEF::DeleteWithNoRightChild(NodePtr& node) {
 TEMPLATE_DEF
 void BIN_TREE_DEF::DeleteWithNoChilds(NodePtr& node) {
   NodePtr parent = node->relatives[Node::Parent];
-
   if (parent->relatives[Node::Left] == node) {
     parent->relatives[Node::Left].reset();
   } else {
