@@ -75,7 +75,7 @@ class BinTree {
   void DeleteWithNoChilds(NodePtr& node);
 
   static bool IsEQ(const Key& key1, const Key& key2);
-  static NodePtr MakeStep(NodePtr node, size_t direction);
+  static NodePtr MakeStep(const NodePtr& node, size_t direction);
   static void GoToEnd(NodePtr& selector, size_t direction);
 };
 

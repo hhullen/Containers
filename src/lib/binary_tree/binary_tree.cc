@@ -103,15 +103,16 @@ void BIN_TREE_DEF::SetNewNodeOnEnd(NodePtr& node, const Value& value) {
 TEMPLATE_DEF
 void BIN_TREE_DEF::SetNewNodeOnNull(NodePtrPair& nodes_pair,
                                     const Value& value) {
-  bool relative_selector = Comparator()(KeyRetractor()(nodes_pair.first->value),
-                                        KeyRetractor()(value));
+  NodePtr& node_prev = nodes_pair.first;
+  NodePtr& node_curr = nodes_pair.second;
+  bool relative_selector =
+      Comparator()(KeyRetractor()(node_prev->value), KeyRetractor()(value));
 
-  nodes_pair.first->relatives[relative_selector].reset(new Node());
-  nodes_pair.second = nodes_pair.first->relatives[relative_selector];
+  node_prev->relatives[relative_selector].reset(new Node());
+  node_curr = node_prev->relatives[relative_selector];
 
-  nodes_pair.second->value = value;
-  nodes_pair.second->relatives[Node::Parent].reset(nodes_pair.first.get(),
-                                                   [this](Node*) {});
+  node_curr->value = value;
+  node_curr->relatives[Node::Parent].reset(node_prev.get(), [this](Node*) {});
 }
 
 TEMPLATE_DEF
@@ -130,20 +131,18 @@ BIN_TREE_DEF::NodePtrPair BIN_TREE_DEF::Seek(const Key& key) {
 
 TEMPLATE_DEF
 void BIN_TREE_DEF::DeleteWithNoLeftChild(NodePtr& node) {
-  node->value = node->relatives[Node::Right]->value;
-  node->relatives[Node::Left] =
-      node->relatives[Node::Right]->relatives[Node::Left];
-  node->relatives[Node::Right] =
-      node->relatives[Node::Right]->relatives[Node::Right];
+  NodePtr& node_right = node->relatives[Node::Right];
+  node->value = node_right->value;
+  node->relatives[Node::Left] = node_right->relatives[Node::Left];
+  node_right = node_right->relatives[Node::Right];
 }
 
 TEMPLATE_DEF
 void BIN_TREE_DEF::DeleteWithNoRightChild(NodePtr& node) {
-  node->value = node->relatives[Node::Left]->value;
-  node->relatives[Node::Right] =
-      node->relatives[Node::Left]->relatives[Node::Right];
-  node->relatives[Node::Left] =
-      node->relatives[Node::Left]->relatives[Node::Left];
+  NodePtr& node_left = node->relatives[Node::Left];
+  node->value = node_left->value;
+  node->relatives[Node::Right] = node_left->relatives[Node::Right];
+  node_left = node_left->relatives[Node::Left];
 }
 
 TEMPLATE_DEF
@@ -166,7 +165,8 @@ bool BIN_TREE_DEF::IsEQ(const Key& key1, const Key& key2) {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::NodePtr BIN_TREE_DEF::MakeStep(NodePtr node, size_t direction) {
+BIN_TREE_DEF::NodePtr BIN_TREE_DEF::MakeStep(const NodePtr& node,
+                                             size_t direction) {
   return node->relatives[direction];
 }
 
