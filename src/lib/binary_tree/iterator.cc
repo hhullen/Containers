@@ -15,7 +15,7 @@ TEMPLATE_DEF
 Value BIN_TREE_DEF::Iterator::operator*() const { return node_ptr_->value; }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator++() {
+typename BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator++() {
   if (node_ptr_ == end_) {
     return *this;
   }
@@ -41,14 +41,14 @@ BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator++() {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator BIN_TREE_DEF::Iterator::operator++(int) {
-  BIN_TREE_DEF::Iterator iter(*this);
+typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Iterator::operator++(int) {
+  typename BIN_TREE_DEF::Iterator iter(*this);
   ++(*this);
   return iter;
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator--() {
+typename BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator--() {
   NodePtr selector_left = node_ptr_->relatives[Node::Left];
   if (selector_left) {
     GoToEnd(selector_left, Node::Right);
@@ -76,21 +76,21 @@ BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator--() {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator BIN_TREE_DEF::Iterator::operator--(int) {
-  BIN_TREE_DEF::Iterator iter(*this);
+typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Iterator::operator--(int) {
+  typename BIN_TREE_DEF::Iterator iter(*this);
   --(*this);
   return iter;
 }
 
 TEMPLATE_DEF
 bool BIN_TREE_DEF::Iterator::operator==(
-    const BIN_TREE_DEF::Iterator& other) const {
+    const typename BIN_TREE_DEF::Iterator& other) const {
   return node_ptr_ == other.node_ptr_;
 }
 
 TEMPLATE_DEF
 bool BIN_TREE_DEF::Iterator::operator!=(
-    const BIN_TREE_DEF::Iterator& other) const {
+    const typename BIN_TREE_DEF::Iterator& other) const {
   return node_ptr_ != other.node_ptr_;
 }
 

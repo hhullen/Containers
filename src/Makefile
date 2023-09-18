@@ -5,12 +5,11 @@ MAIN_PROJ_NAME=Containers
 TEST_C=$(FUNCS) tests$(SEP)$(MAIN_PROJ_NAME)_tests.cc
 EXECUTABLE=$(MAIN_PROJ_NAME)_tests.out
 COMPILER=g++
-STD=--std=c++20
+STD=--std=c++17
 CPP_FLAGS=-Werror -Wpedantic -Wshadow \
 		  -Wconversion -Wdangling-else -Wnull-dereference -Wsign-conversion  \
-		  --all-warnings --extra-warnings -Wdiv-by-zero  -Wc++20-extensions \
-		  -Wcomment  -Wdeprecated -Winline -Wunused-variable -Wunused-value \
-		  -Wformat-security  -Wdouble-promotion -Wexceptions
+		  --all-warnings --extra-warnings -Wdiv-by-zero -Wcomment -Wdeprecated \
+		  -Winline -Wunused-variable -Wunused-value -Wformat-security  -Wdouble-promotion
 TEST_FLAGS=-lgtest -pthread -lgtest_main
 GCOV_FLAG=--coverage
 EXTENSION=--extensions=cc

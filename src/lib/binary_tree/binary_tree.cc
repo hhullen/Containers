@@ -11,7 +11,7 @@ TEMPLATE_DEF
 BIN_TREE_DEF::~BinTree() {}
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator BIN_TREE_DEF::Begin() {
+typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Begin() {
   if (root_ != end_) {
     NodePtr selector = root_;
     GoToEnd(selector, Node::Left);
@@ -22,7 +22,9 @@ BIN_TREE_DEF::Iterator BIN_TREE_DEF::Begin() {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator BIN_TREE_DEF::End() { return Iterator(end_, end_); }
+typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::End() {
+  return Iterator(end_, end_);
+}
 
 TEMPLATE_DEF
 void BIN_TREE_DEF::Clear() {
@@ -43,7 +45,7 @@ TEMPLATE_DEF
 bool BIN_TREE_DEF::Empty() { return size_ == 0; }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator BIN_TREE_DEF::Find(const Key& key) {
+typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Find(const Key& key) {
   NodePtr found = Seek(key).second;
   if (!found) {
     found = end_;
@@ -52,7 +54,7 @@ BIN_TREE_DEF::Iterator BIN_TREE_DEF::Find(const Key& key) {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator BIN_TREE_DEF::Emplace(const Value& value) {
+typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Emplace(const Value& value) {
   const Key key = KeyRetractor()(value);
   NodePtrPair found = Seek(key);
   if (found.second == end_) {
@@ -68,7 +70,7 @@ BIN_TREE_DEF::Iterator BIN_TREE_DEF::Emplace(const Value& value) {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::Iterator BIN_TREE_DEF::Delete(const Key& key) {
+typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Delete(const Key& key) {
   NodePtr found = Seek(key).second;
   if (!found || found == end_) {
     return Iterator(end_, end_);
@@ -121,7 +123,7 @@ void BIN_TREE_DEF::SetNewNodeOnNull(NodePtrPair& nodes_pair,
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::NodePtrPair BIN_TREE_DEF::Seek(const Key& key) {
+typename BIN_TREE_DEF::NodePtrPair BIN_TREE_DEF::Seek(const Key& key) {
   NodePtr selector = root_, previous;
   for (; selector && selector != end_;) {
     previous = selector;
@@ -241,9 +243,9 @@ void BIN_TREE_DEF::OutputTreeStruct(std::ostream& os) {
       if (node == end_) {
         continue;
       }
-      os << "[ NODE: " << node->value << " ";
+      os << "[ NODE:" << node->value << " ";
       if (node->relatives[Node::Parent]) {
-        os << " PARENT: " << node->relatives[Node::Parent]->value << " ";
+        os << " PARENT:" << node->relatives[Node::Parent]->value << " ";
       }
       if (node->relatives[Node::Left] && node->relatives[Node::Left] != end_) {
         os << " L:" << node->relatives[Node::Left]->value << " ";
@@ -265,7 +267,8 @@ void BIN_TREE_DEF::OutputTreeStruct(std::ostream& os) {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::NodePtr& BIN_TREE_DEF::GetSelfFromNodeParent(NodePtr& node) {
+typename BIN_TREE_DEF::NodePtr& BIN_TREE_DEF::GetSelfFromNodeParent(
+    NodePtr& node) {
   if (node->relatives[Node::Parent]->relatives[Node::Left] == node) {
     return node->relatives[Node::Parent]->relatives[Node::Left];
   } else {
@@ -283,8 +286,8 @@ bool BIN_TREE_DEF::IsEQ(const Key& key1, const Key& key2) {
 }
 
 TEMPLATE_DEF
-BIN_TREE_DEF::NodePtr& BIN_TREE_DEF::GetRelative(const NodePtr& node,
-                                                 size_t direction) {
+typename BIN_TREE_DEF::NodePtr& BIN_TREE_DEF::GetRelative(const NodePtr& node,
+                                                          size_t direction) {
   return node->relatives[direction];
 }
 
