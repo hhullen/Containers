@@ -237,7 +237,6 @@ TEST(BinTree, Delete_with_both_child_and_left_of_right_child) {
   FillTree(tree, data_upload_1);
 
   hhullen::BinTree<double>::Iterator iter;
-
   iter = tree.Delete(1.1);
   EXPECT_EQ(*iter, 1.15);
   EXPECT_TRUE(tree.Find(1.1) == tree.End());
@@ -261,24 +260,11 @@ TEST(BinTree, Delete_all) {
   for (size_t i = 0; i < data_upload_1.size(); ++i, --count) {
     EXPECT_EQ(tree.Size(), count);
     double element = data_upload_1[i];
-    std::cout << "TRY: " << element << "\n";
     tree.Delete(element);
     EXPECT_EQ(tree.Find(element), tree.End());
-    hhullen::BinTree<double>::Iterator iter = tree.Begin();
-    size_t j = 0;
-    for (; iter != tree.End(); ++iter, ++j) {
-      // EXPECT_EQ(data_result_1.at(i), *iter);
-      std::cout << *iter << " - ";
-    }
-    std::cout << "DEL: " << element << " LEFT: " << j << "\n";
-  }
-
-  hhullen::BinTree<double>::Iterator iter = tree.Begin();
-  for (size_t i = 0; iter != tree.End(); ++iter, ++i) {
-    // EXPECT_EQ(data_result_1.at(i), *iter);
-    std::cout << " - ";
   }
   EXPECT_EQ(tree.Size(), 0);
+  EXPECT_EQ(tree.Begin(), tree.End());
 }
 
 TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {

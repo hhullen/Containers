@@ -24,18 +24,18 @@ BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator++() {
     GoToEnd(selector_right, Node::Left);
     node_ptr_ = selector_right;
   } else {
-    NodePtr right_of_parent = MakeStep(node_ptr_, Node::Parent);
-    right_of_parent = MakeStep(right_of_parent, Node::Right);
+    NodePtr right_of_parent =
+        GetRelative(GetRelative(node_ptr_, Node::Parent), Node::Right);
     if (right_of_parent == node_ptr_) {
-      NodePtr parent_of_current = MakeStep(node_ptr_, Node::Parent);
+      NodePtr parent_of_current = GetRelative(node_ptr_, Node::Parent);
       for (; parent_of_current &&
              Comparator()(KeyRetractor()(parent_of_current->value),
                           KeyRetractor()(node_ptr_->value));
-           parent_of_current = MakeStep(node_ptr_, Node::Parent)) {
+           parent_of_current = GetRelative(node_ptr_, Node::Parent)) {
         node_ptr_ = parent_of_current;
       }
     }
-    node_ptr_ = MakeStep(node_ptr_, Node::Parent);
+    node_ptr_ = GetRelative(node_ptr_, Node::Parent);
   }
   return *this;
 }
@@ -55,18 +55,18 @@ BIN_TREE_DEF::Iterator& BIN_TREE_DEF::Iterator::operator--() {
     node_ptr_ = selector_left;
   } else {
     NodePtr current = node_ptr_;
-    NodePtr left_of_parent = MakeStep(current, Node::Parent);
-    left_of_parent = MakeStep(left_of_parent, Node::Left);
+    NodePtr left_of_parent =
+        GetRelative(GetRelative(current, Node::Parent), Node::Left);
     if (left_of_parent == current) {
-      NodePtr parent_of_current = MakeStep(current, Node::Parent);
+      NodePtr parent_of_current = GetRelative(current, Node::Parent);
       for (; parent_of_current &&
              Comparator()(KeyRetractor()(current->value),
                           KeyRetractor()(parent_of_current->value));
-           parent_of_current = MakeStep(current, Node::Parent)) {
+           parent_of_current = GetRelative(current, Node::Parent)) {
         current = parent_of_current;
       }
     }
-    current = MakeStep(current, Node::Parent);
+    current = GetRelative(current, Node::Parent);
     if (!current) {
       return *this;
     }

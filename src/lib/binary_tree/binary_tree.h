@@ -60,6 +60,8 @@ class BinTree {
   Iterator Delete(const Key& key);
   size_t Size();
 
+  void OutputTreeStruct(std::ostream& os);
+
  private:
   NodePtr root_, end_;
   size_t size_;
@@ -67,12 +69,16 @@ class BinTree {
   void SetNewNodeOnNull(NodePtrPair& nodes_pair, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
-  void PullToNodeFromRelative(NodePtr& node, size_t relative);
+  void ReplaceNode(NodePtr& to_replace, NodePtr& src);
+  void ReplaceNodeRelative(NodePtr& to_replace, NodePtr& replacer,
+                           size_t relative);
   void DeleteWithNoChilds(NodePtr& node);
   void DeleteWithBothChilds(NodePtr& node);
+  size_t CalculateHeight(const NodePtr&);
+  NodePtr& GetSelfFromNodeParent(NodePtr& node);
 
   static bool IsEQ(const Key& key1, const Key& key2);
-  static NodePtr MakeStep(const NodePtr& node, size_t direction);
+  static NodePtr& GetRelative(const NodePtr& node, size_t direction);
   static void GoToEnd(NodePtr& selector, size_t direction);
 };
 

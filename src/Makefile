@@ -6,9 +6,11 @@ TEST_C=$(FUNCS) tests$(SEP)$(MAIN_PROJ_NAME)_tests.cc
 EXECUTABLE=$(MAIN_PROJ_NAME)_tests.out
 COMPILER=g++
 STD=--std=c++20
-CPP_FLAGS=-Wextra -Werror -Wpedantic -Wshadow \
-		  -Wconversion -Wnull-dereference -Wsign-conversion  \
-		  --all-warnings --extra-warnings
+CPP_FLAGS=-Werror -Wpedantic -Wshadow \
+		  -Wconversion -Wdangling-else -Wnull-dereference -Wsign-conversion  \
+		  --all-warnings --extra-warnings -Wdiv-by-zero  -Wc++20-extensions \
+		  -Wcomment  -Wdeprecated -Winline -Wunused-variable -Wunused-value \
+		  -Wformat-security  -Wdouble-promotion -Wexceptions
 TEST_FLAGS=-lgtest -pthread -lgtest_main
 GCOV_FLAG=--coverage
 EXTENSION=--extensions=cc
@@ -79,7 +81,7 @@ lib:
 	$(COPY) lib$(SEP)* $(MAIN_PROJ_NAME)
 
 valgrind: clean
-	$(COMPILER) $(STD) -g $(GCOV_FLAG) $(TEST_C) -o $(EXECUTABLE) $(TEST_FLAGS)
+	$(COMPILER) -g $(STD) $(CPP_FLAGS) $(TEST_C) -o $(EXECUTABLE) $(TEST_FLAGS) -I .
 	CK_FORK=no valgrind $(VALGRIND_SETUP) .$(SEP)$(EXECUTABLE)
 
 leaks: tests
