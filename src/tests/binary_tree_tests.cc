@@ -299,6 +299,20 @@ TEST(BinTree, Balancing_on_emplace_DEcrease_large) {
   EXPECT_EQ(tree.Height(), 14);
 }
 
+TEST(BinTree, Balancing_on_delete) {
+  hhullen::BinTree<double> tree;
+  for (int i = 1; i < 16; ++i) {
+    tree.Emplace(i);
+  }
+  EXPECT_EQ(tree.Height(), 4);
+
+  for (int i = 1; i < 16; ++i) {
+    tree.Delete(i);
+  }
+  EXPECT_EQ(tree.Height(), 0);
+  EXPECT_EQ(tree.Size(), 0);
+}
+
 TEST(BinTree, Reusing_object) {
   hhullen::BinTree<double> tree;
   for (int i = 10; i > 0; --i) {
