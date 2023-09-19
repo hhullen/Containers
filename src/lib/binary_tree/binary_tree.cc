@@ -8,7 +8,12 @@ TEMPLATE_DEF
 BIN_TREE_DEF::BinTree() : root_{new Node()}, end_{root_}, size_{0} {}
 
 TEMPLATE_DEF
-BIN_TREE_DEF::~BinTree() {}
+BIN_TREE_DEF::~BinTree() {
+  if (root_) {
+    delete root_;
+    root_ = nullptr;
+  }
+}
 
 TEMPLATE_DEF
 typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Begin() {
@@ -28,7 +33,7 @@ typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::End() {
 
 TEMPLATE_DEF
 void BIN_TREE_DEF::Clear() {
-  root_.reset(new Node());
+  root_->~Node();
   end_ = root_;
   size_ = 0;
 }
@@ -59,11 +64,12 @@ typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Emplace(const Value& value) {
   NodePtrPair found = Seek(key);
   if (found.second == end_) {
     SetNewNodeOnEnd(found.second, value);
+    RunBalancingFromNode(found.second);
     ++size_;
   } else if (found.second) {
     found.second->value = value;
   } else {
-    SetNewNodeOnNull(found, value);
+    RunBalancingFromNode(SetNewNodeOnNull(found.first, value));
     ++size_;
   }
   return Iterator(found.second, end_);
@@ -77,7 +83,9 @@ typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Delete(const Key& key) {
   }
   Iterator next = ++Iterator(found, end_);
   if (!found->relatives[Node::Left] && !found->relatives[Node::Right]) {
-    GetSelfFromNodeParent(found).reset();
+    NodePtr& node = GetSelfFromNodeParent(found);
+    delete node;
+    node = nullptr;
   } else if (found->relatives[Node::Right] == end_ &&
              !found->relatives[Node::Left]) {
     ReplaceNode(found, end_);
@@ -89,12 +97,16 @@ typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::Delete(const Key& key) {
   } else {
     DeleteWithBothChilds(found);
   }
+  // RunBalancingFromNode()
   --size_;
   return next;
 }
 
 TEMPLATE_DEF
 size_t BIN_TREE_DEF::Size() { return size_; }
+
+TEMPLATE_DEF
+size_t BIN_TREE_DEF::Height() { return CalculateHeight(root_); }
 
 // /*
 //     private methods
@@ -103,23 +115,21 @@ size_t BIN_TREE_DEF::Size() { return size_; }
 TEMPLATE_DEF
 void BIN_TREE_DEF::SetNewNodeOnEnd(NodePtr& node, const Value& value) {
   node->value = value;
-  node->relatives[Node::Right].reset(new Node());
+  node->relatives[Node::Right] = new Node();
   end_ = node->relatives[Node::Right];
-  end_->relatives[Node::Parent].reset(node.get(), [this](Node*) {});
+  end_->relatives[Node::Parent] = node;
 }
 
 TEMPLATE_DEF
-void BIN_TREE_DEF::SetNewNodeOnNull(NodePtrPair& nodes_pair,
-                                    const Value& value) {
-  NodePtr& node_prev = nodes_pair.first;
-  NodePtr& node_curr = nodes_pair.second;
+typename BIN_TREE_DEF::NodePtr& BIN_TREE_DEF::SetNewNodeOnNull(
+    NodePtr& prev, const Value& value) {
   bool relative_selector =
-      Comparator()(KeyRetractor()(node_prev->value), KeyRetractor()(value));
-
-  node_prev->relatives[relative_selector].reset(new Node());
-  node_curr = node_prev->relatives[relative_selector];
+      Comparator()(KeyRetractor()(prev->value), KeyRetractor()(value));
+  NodePtr& node_curr = prev->relatives[relative_selector];
+  node_curr = new Node();
   node_curr->value = value;
-  node_curr->relatives[Node::Parent].reset(node_prev.get(), [this](Node*) {});
+  node_curr->relatives[Node::Parent] = prev;
+  return node_curr;
 }
 
 TEMPLATE_DEF
@@ -154,6 +164,11 @@ void BIN_TREE_DEF::ReplaceNode(NodePtr& to_replace, NodePtr& src) {
   if (!src->relatives[Node::Parent]) {
     root_ = src;
   }
+  to_replace->relatives[Node::Left] = nullptr;
+  to_replace->relatives[Node::Right] = nullptr;
+  to_replace->relatives[Node::Parent] = nullptr;
+  delete to_replace;
+  to_replace = nullptr;
 }
 
 TEMPLATE_DEF
@@ -162,8 +177,7 @@ void BIN_TREE_DEF::ReplaceNodeRelative(NodePtr& to_replace, NodePtr& replacer,
   if (to_replace->relatives[relative] != replacer) {
     replacer->relatives[relative] = to_replace->relatives[relative];
     if (replacer->relatives[relative]) {
-      replacer->relatives[relative]->relatives[Node::Parent].reset(
-          replacer.get(), [this](Node*) {});
+      replacer->relatives[relative]->relatives[Node::Parent] = replacer;
     }
   }
 }
@@ -172,9 +186,9 @@ TEMPLATE_DEF
 void BIN_TREE_DEF::DeleteWithNoChilds(NodePtr& node) {
   NodePtr parent = node->relatives[Node::Parent];
   if (parent->relatives[Node::Left] == node) {
-    parent->relatives[Node::Left].reset();
+    parent->relatives[Node::Left] = nullptr;
   } else {
-    parent->relatives[Node::Right].reset();
+    parent->relatives[Node::Right] = nullptr;
   }
 }
 
@@ -188,7 +202,7 @@ void BIN_TREE_DEF::DeleteWithBothChilds(NodePtr& node) {
           exchange_node->relatives[Node::Right];
       ReplaceNode(node, exchange_node);
     } else {
-      GetSelfFromNodeParent(exchange_node).reset();
+      GetSelfFromNodeParent(exchange_node) = nullptr;
       ReplaceNode(node, exchange_node);
     }
   } else {
@@ -201,19 +215,16 @@ void BIN_TREE_DEF::DeleteWithBothChilds(NodePtr& node) {
 
 TEMPLATE_DEF
 size_t BIN_TREE_DEF::CalculateHeight(const NodePtr& start_node) {
+  if (!start_node || start_node == end_) {
+    return 0;
+  }
   size_t height = 0;
   std::vector<NodePtr> traversal_targets[2];
   bool selector = 0;
-  if (start_node == end_) {
-    return 0;
-  }
   traversal_targets[selector].emplace_back(start_node);
   for (; !traversal_targets[selector].empty(); ++height) {
     for (size_t i = 0; i < traversal_targets[selector].size(); ++i) {
       NodePtr& node = traversal_targets[selector][i];
-      if (node == end_) {
-        continue;
-      }
       if (node->relatives[Node::Left] && node->relatives[Node::Left] != end_) {
         traversal_targets[!selector].emplace_back(node->relatives[Node::Left]);
       }
@@ -230,6 +241,7 @@ size_t BIN_TREE_DEF::CalculateHeight(const NodePtr& start_node) {
 
 TEMPLATE_DEF
 void BIN_TREE_DEF::OutputTreeStruct(std::ostream& os) {
+  size_t height = 0;
   NodePtr& start_node = root_;
   std::vector<NodePtr> traversal_targets[2];
   bool selector = 0;
@@ -237,7 +249,7 @@ void BIN_TREE_DEF::OutputTreeStruct(std::ostream& os) {
     return;
   }
   traversal_targets[selector].emplace_back(start_node);
-  for (; !traversal_targets[selector].empty();) {
+  for (; !traversal_targets[selector].empty(); ++height) {
     for (size_t i = 0; i < traversal_targets[selector].size(); ++i) {
       NodePtr& node = traversal_targets[selector][i];
       if (node == end_) {
@@ -264,6 +276,7 @@ void BIN_TREE_DEF::OutputTreeStruct(std::ostream& os) {
     traversal_targets[selector].clear();
     selector = !selector;
   }
+  os << "HEIGHT: " << height << "\n";
 }
 
 TEMPLATE_DEF
@@ -273,6 +286,88 @@ typename BIN_TREE_DEF::NodePtr& BIN_TREE_DEF::GetSelfFromNodeParent(
     return node->relatives[Node::Parent]->relatives[Node::Left];
   } else {
     return node->relatives[Node::Parent]->relatives[Node::Right];
+  }
+}
+
+TEMPLATE_DEF
+void BIN_TREE_DEF::RunBalancingFromNode(NodePtr node) {
+  for (node = node->relatives[Node::Parent]; node;
+       node = node->relatives[Node::Parent]) {
+    int height_diff = GetChilrenHeightDifference(node);
+    if (height_diff > 1) {
+      if (GetChilrenHeightDifference(node->relatives[Node::Right]) < 0) {
+        RotateRight(node->relatives[Node::Right]);
+      }
+      RotateLeft(node);
+      return;
+    } else if (height_diff < -1) {
+      if (GetChilrenHeightDifference(node->relatives[Node::Left]) > 0) {
+        RotateLeft(node->relatives[Node::Left]);
+      }
+      RotateRight(node);
+      return;
+    }
+  }
+}
+
+TEMPLATE_DEF
+int BIN_TREE_DEF::GetChilrenHeightDifference(const NodePtr& node) {
+  if (node) {
+    return static_cast<int>(CalculateHeight(node->relatives[Node::Right]) -
+                            CalculateHeight(node->relatives[Node::Left]));
+  }
+  return 0;
+}
+
+TEMPLATE_DEF
+void BIN_TREE_DEF::RotateLeft(NodePtr& node) {
+  NodePtr to_turn = node->relatives[Node::Right];
+
+  node->relatives[Node::Right] = to_turn->relatives[Node::Left];
+  if (node->relatives[Node::Right]) {
+    node->relatives[Node::Right]->relatives[Node::Parent] = node;
+  }
+
+  NodePtr& to_turn_left = to_turn->relatives[Node::Left];
+  to_turn_left = node;
+  if (to_turn_left) {
+    to_turn->relatives[Node::Parent] = to_turn_left->relatives[Node::Parent];
+    if (to_turn->relatives[Node::Parent]) {
+      if (to_turn->relatives[Node::Parent]->relatives[Node::Left] == node) {
+        to_turn->relatives[Node::Parent]->relatives[Node::Left] = to_turn;
+      } else {
+        to_turn->relatives[Node::Parent]->relatives[Node::Right] = to_turn;
+      }
+    } else {
+      root_ = to_turn;
+    }
+    to_turn_left->relatives[Node::Parent] = to_turn;
+  }
+}
+
+TEMPLATE_DEF
+void BIN_TREE_DEF::RotateRight(NodePtr node) {
+  NodePtr to_turn = node->relatives[Node::Left];
+
+  node->relatives[Node::Left] = to_turn->relatives[Node::Right];
+  if (node->relatives[Node::Left]) {
+    node->relatives[Node::Left]->relatives[Node::Parent] = node;
+  }
+
+  NodePtr& to_turn_right = to_turn->relatives[Node::Right];
+  to_turn_right = node;
+  if (to_turn_right) {
+    to_turn->relatives[Node::Parent] = to_turn_right->relatives[Node::Parent];
+    if (to_turn->relatives[Node::Parent]) {
+      if (to_turn->relatives[Node::Parent]->relatives[Node::Left] == node) {
+        to_turn->relatives[Node::Parent]->relatives[Node::Left] = to_turn;
+      } else {
+        to_turn->relatives[Node::Parent]->relatives[Node::Right] = to_turn;
+      }
+    } else {
+      root_ = to_turn;
+    }
+    to_turn_right->relatives[Node::Parent] = to_turn;
   }
 }
 

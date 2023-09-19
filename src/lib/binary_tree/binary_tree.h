@@ -24,10 +24,19 @@ template <class Value, class Key = Value,
 class BinTree {
  public:
   struct Node;
-  using NodePtr = std::shared_ptr<Node>;
+  // using NodePtr = std::shared_ptr<Node>;
+  using NodePtr = Node*;
   using NodePtrPair = std::pair<NodePtr, NodePtr>;
   struct Node {
-    ~Node() {}
+    ~Node() {
+      for (int i = 0; i < 2; ++i) {
+        if (relatives[i]) {
+          delete relatives[i];
+        }
+        relatives[i] = nullptr;
+      }
+      relatives[2] = nullptr;
+    }
     Value value;
     enum Relatives : size_t { Left = 0, Right, Parent };
     NodePtr relatives[3];
@@ -59,6 +68,7 @@ class BinTree {
   Iterator Emplace(const Value& value);
   Iterator Delete(const Key& key);
   size_t Size();
+  size_t Height();
 
   void OutputTreeStruct(std::ostream& os);
 
@@ -66,7 +76,7 @@ class BinTree {
   NodePtr root_, end_;
   size_t size_;
 
-  void SetNewNodeOnNull(NodePtrPair& nodes_pair, const Value& value);
+  NodePtr& SetNewNodeOnNull(NodePtr& prev, const Value& value);
   void SetNewNodeOnEnd(NodePtr& selector, const Value& value);
   NodePtrPair Seek(const Key& key);
   void ReplaceNode(NodePtr& to_replace, NodePtr& src);
@@ -76,6 +86,10 @@ class BinTree {
   void DeleteWithBothChilds(NodePtr& node);
   size_t CalculateHeight(const NodePtr&);
   NodePtr& GetSelfFromNodeParent(NodePtr& node);
+  void RunBalancingFromNode(NodePtr node);
+  int GetChilrenHeightDifference(const NodePtr& node);
+  void RotateLeft(NodePtr& node);
+  void RotateRight(NodePtr node);
 
   static bool IsEQ(const Key& key1, const Key& key2);
   static NodePtr& GetRelative(const NodePtr& node, size_t direction);

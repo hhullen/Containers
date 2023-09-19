@@ -267,6 +267,61 @@ TEST(BinTree, Delete_all) {
   EXPECT_EQ(tree.Begin(), tree.End());
 }
 
+TEST(BinTree, Balancing_on_emplace_INcrease) {
+  hhullen::BinTree<double> tree;
+  for (int i = 1; i < 16; ++i) {
+    tree.Emplace(i);
+  }
+  EXPECT_EQ(tree.Height(), 4);
+}
+
+TEST(BinTree, Balancing_on_emplace_DEcrease) {
+  hhullen::BinTree<double> tree;
+  for (int i = 16; i > 0; --i) {
+    tree.Emplace(i);
+  }
+  EXPECT_EQ(tree.Height(), 5);
+}
+
+TEST(BinTree, Balancing_on_emplace_INcrease_large) {
+  hhullen::BinTree<double> tree;
+  for (int i = 1; i < 10000; ++i) {
+    tree.Emplace(i);
+  }
+  EXPECT_EQ(tree.Height(), 14);
+}
+
+TEST(BinTree, Balancing_on_emplace_DEcrease_large) {
+  hhullen::BinTree<double> tree;
+  for (int i = 10000; i > 0; --i) {
+    tree.Emplace(i);
+  }
+  EXPECT_EQ(tree.Height(), 14);
+}
+
+TEST(BinTree, Reusing_object) {
+  hhullen::BinTree<double> tree;
+  for (int i = 10; i > 0; --i) {
+    tree.Emplace(i);
+  }
+  tree.Clear();
+  for (int i = 100; i > 0; --i) {
+    tree.Emplace(i);
+  }
+  tree.Clear();
+  for (int i = 1000; i > 0; --i) {
+    tree.Emplace(i);
+  }
+  tree.Clear();
+  for (int i = 10000; i > 0; --i) {
+    tree.Emplace(i);
+  }
+}
+
+// /*
+//   Iterator
+// */
+
 TEST(BinTree_Iterator, Iterator_prefix_INcrement_1) {
   hhullen::BinTree<double> tree;
   FillTree(tree, data_upload_1);
