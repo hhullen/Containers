@@ -34,6 +34,7 @@ typename BIN_TREE_DEF::Iterator BIN_TREE_DEF::End() {
 TEMPLATE_DEF
 void BIN_TREE_DEF::Clear() {
   root_->~Node();
+  end_ = root_;
   size_ = 0;
 }
 
