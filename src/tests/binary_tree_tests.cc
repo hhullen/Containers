@@ -306,8 +306,31 @@ TEST(BinTree, Balancing_on_delete) {
   }
   EXPECT_EQ(tree.Height(), 4);
 
-  for (int i = 1; i < 16; ++i) {
+  size_t size = tree.Size();
+  for (int i = 1; i < 16; ++i, --size) {
+    EXPECT_EQ(tree.Contains(i), true);
+    EXPECT_EQ(tree.Size(), size);
     tree.Delete(i);
+    EXPECT_EQ(tree.Size(), size - 1);
+    EXPECT_EQ(tree.Contains(i), false);
+  }
+  EXPECT_EQ(tree.Height(), 0);
+  EXPECT_EQ(tree.Size(), 0);
+}
+
+TEST(BinTree, Balancing_on_delete_large) {
+  hhullen::BinTree<double> tree;
+  for (int i = 1; i < 8192; ++i) {
+    tree.Emplace(i);
+  }
+
+  size_t size = tree.Size();
+  for (int i = 1; i < 8192; ++i, --size) {
+    EXPECT_EQ(tree.Contains(i), true);
+    EXPECT_EQ(tree.Size(), size);
+    tree.Delete(i);
+    EXPECT_EQ(tree.Size(), size - 1);
+    EXPECT_EQ(tree.Contains(i), false);
   }
   EXPECT_EQ(tree.Height(), 0);
   EXPECT_EQ(tree.Size(), 0);
