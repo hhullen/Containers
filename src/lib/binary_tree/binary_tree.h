@@ -24,7 +24,6 @@ template <class Value, class Key = Value,
 class BinTree {
  public:
   struct Node;
-  // using NodePtr = std::shared_ptr<Node>;
   using NodePtr = Node*;
   using NodePtrPair = std::pair<NodePtr, NodePtr>;
   struct Node {
