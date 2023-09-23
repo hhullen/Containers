@@ -1,12 +1,12 @@
 #ifndef SRC_LIB_BINARY_TREE_DEFINITION_H_
 #define SRC_LIB_BINARY_TREE_DEFINITION_H_
 
-#include <lib/i_container_iterator.h>
-
 #include <functional>
 #include <iostream>
 #include <memory>
 #include <vector>
+
+#include "i_container_iterator.h"
 
 namespace hhullen {
 

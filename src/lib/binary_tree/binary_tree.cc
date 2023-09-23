@@ -107,46 +107,47 @@ size_t BIN_TREE_DEF::Size() { return size_; }
 TEMPLATE_DEF
 size_t BIN_TREE_DEF::Height() { return CalculateHeight(root_); }
 
-TEMPLATE_DEF
-void BIN_TREE_DEF::OutputTreeStruct(std::ostream& os) {
-  size_t height = 0, size = 0;
-  NodePtr& start_node = root_;
-  std::vector<NodePtr> traversal_targets[2];
-  bool selector = 0;
-  if (start_node == end_) {
-    return;
-  }
-  traversal_targets[selector].emplace_back(start_node);
-  for (; !traversal_targets[selector].empty(); ++height) {
-    for (size_t i = 0; i < traversal_targets[selector].size(); ++i) {
-      NodePtr& node = traversal_targets[selector][i];
-      if (node == end_) {
-        continue;
-      }
-      ++size;
-      os << "[ NODE:" << node->value << " ";
-      if (node->relatives[Node::Parent]) {
-        os << " PARENT:" << node->relatives[Node::Parent]->value << " ";
-      }
-      if (node->relatives[Node::Left] && node->relatives[Node::Left] != end_) {
-        os << " L:" << node->relatives[Node::Left]->value << " ";
+// TEMPLATE_DEF
+// void BIN_TREE_DEF::OutputTreeStruct(std::ostream& os) {
+//   size_t height = 0, size = 0;
+//   NodePtr& start_node = root_;
+//   std::vector<NodePtr> traversal_targets[2];
+//   bool selector = 0;
+//   if (start_node == end_) {
+//     return;
+//   }
+//   traversal_targets[selector].emplace_back(start_node);
+//   for (; !traversal_targets[selector].empty(); ++height) {
+//     for (size_t i = 0; i < traversal_targets[selector].size(); ++i) {
+//       NodePtr& node = traversal_targets[selector][i];
+//       if (node == end_) {
+//         continue;
+//       }
+//       ++size;
+//       os << "[ NODE:" << node->value << " ";
+//       if (node->relatives[Node::Parent]) {
+//         os << " PARENT:" << node->relatives[Node::Parent]->value << " ";
+//       }
+//       if (node->relatives[Node::Left] && node->relatives[Node::Left] != end_)
+//       {
+//         os << " L:" << node->relatives[Node::Left]->value << " ";
 
-        traversal_targets[!selector].emplace_back(node->relatives[Node::Left]);
-      }
-      if (node->relatives[Node::Right] &&
-          node->relatives[Node::Right] != end_) {
-        os << " R:" << node->relatives[Node::Right]->value << " ";
+//         traversal_targets[!selector].emplace_back(node->relatives[Node::Left]);
+//       }
+//       if (node->relatives[Node::Right] &&
+//           node->relatives[Node::Right] != end_) {
+//         os << " R:" << node->relatives[Node::Right]->value << " ";
 
-        traversal_targets[!selector].emplace_back(node->relatives[Node::Right]);
-      }
-      os << "] ";
-    }
-    os << "\n";
-    traversal_targets[selector].clear();
-    selector = !selector;
-  }
-  os << "HEIGHT: " << height << " SIZE: " << size << "\n";
-}
+//         traversal_targets[!selector].emplace_back(node->relatives[Node::Right]);
+//       }
+//       os << "] ";
+//     }
+//     os << "\n";
+//     traversal_targets[selector].clear();
+//     selector = !selector;
+//   }
+//   os << "HEIGHT: " << height << " SIZE: " << size << "\n";
+// }
 
 // /*
 //     private methods
@@ -174,7 +175,7 @@ typename BIN_TREE_DEF::NodePtr& BIN_TREE_DEF::SetNewNodeOnNull(
 
 TEMPLATE_DEF
 typename BIN_TREE_DEF::NodePtrPair BIN_TREE_DEF::Seek(const Key& key) {
-  NodePtr selector = root_, previous;
+  NodePtr selector = root_, previous = root_;
   for (; selector && selector != end_;) {
     previous = selector;
     const Key selected_key = KeyRetractor()(selector->value);

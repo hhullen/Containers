@@ -18,6 +18,8 @@ CLANG_FILE_WAY=..$(SEP)materials$(SEP)linters$(SEP)$(CLANG_FILE)
 CHECK_FILES= \
 	lib$(SEP)*.h \
 	$(FUNCS:.cc.h) \
+	lib$(SEP)binary_tree$(SEP)*.cc \
+	lib$(SEP)hash_table$(SEP)*.cc \
 	$(FUNCS)
 CPPCH_SETUP=--enable=warning,performance,portability  -v --language=c++ $(STD)
 VALGRIND_SETUP=--tool=memcheck --leak-check=full --show-leak-kinds=all
