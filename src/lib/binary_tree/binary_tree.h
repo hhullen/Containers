@@ -71,7 +71,7 @@ class BinTree {
   size_t Size();
   size_t Height();
 
-  void OutputTreeStruct(std::ostream& os);
+  // void OutputTreeStruct(std::ostream& os);
 
  private:
   NodePtr root_, end_;
