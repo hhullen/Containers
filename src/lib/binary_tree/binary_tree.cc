@@ -322,7 +322,6 @@ int BIN_TREE_DEF::GetChilrenHeightDifference(const NodePtr& node) {
 TEMPLATE_DEF
 void BIN_TREE_DEF::RotateLeft(NodePtr& node) {
   NodePtr to_turn = node->relatives[Node::Right];
-
   node->relatives[Node::Right] = to_turn->relatives[Node::Left];
   if (node->relatives[Node::Right]) {
     node->relatives[Node::Right]->relatives[Node::Parent] = node;
@@ -348,7 +347,6 @@ void BIN_TREE_DEF::RotateLeft(NodePtr& node) {
 TEMPLATE_DEF
 void BIN_TREE_DEF::RotateRight(NodePtr node) {
   NodePtr to_turn = node->relatives[Node::Left];
-
   node->relatives[Node::Left] = to_turn->relatives[Node::Right];
   if (node->relatives[Node::Left]) {
     node->relatives[Node::Left]->relatives[Node::Parent] = node;

@@ -1,6 +1,8 @@
 #ifndef SRC_LIB_BINARY_TREE_DEFINITION_H_
 #define SRC_LIB_BINARY_TREE_DEFINITION_H_
 
+#include <lib/i_container_iterator.h>
+
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -40,17 +42,17 @@ class BinTree {
     enum Relatives : size_t { Left = 0, Right, Parent };
     NodePtr relatives[3];
   };
-  class Iterator {
+  class Iterator : public IContainerIterator<Iterator, Value> {
    public:
     Iterator();
     Iterator(NodePtr node, NodePtr end);
-    Value operator*() const;
-    Iterator& operator++();
-    Iterator operator++(int);
-    Iterator& operator--();
-    Iterator operator--(int);
-    bool operator==(const Iterator& other) const;
-    bool operator!=(const Iterator& other) const;
+    Value operator*() const override;
+    Iterator& operator++() override;
+    Iterator operator++(int) override;
+    Iterator& operator--() override;
+    Iterator operator--(int) override;
+    bool operator==(const Iterator& other) const override;
+    bool operator!=(const Iterator& other) const override;
 
    private:
     NodePtr node_ptr_, end_;
