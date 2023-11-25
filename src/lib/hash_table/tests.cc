@@ -87,8 +87,18 @@ TEST(HashTable_test, Contains_method) {
 TEST(HashTable_test, Delete_method_no_downscale) {
   hhullen::HashTable<double> ht{1.0, 2.0, 3.0};
   auto it = ht.Delete(2.0);
-  std::cout << ht.Size() << "\n";
+  EXPECT_EQ(ht.Size(), 2);
+  it = ht.Find(2.0);
+  EXPECT_TRUE(it == ht.End());
+
+  it = ht.Delete(3.0);
+  EXPECT_EQ(ht.Size(), 1);
   it = ht.Find(3.0);
+  EXPECT_TRUE(it == ht.End());
+
+  it = ht.Delete(1.0);
+  EXPECT_EQ(ht.Size(), 0);
+  it = ht.Find(1.0);
   EXPECT_TRUE(it == ht.End());
 }
 

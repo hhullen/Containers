@@ -33,6 +33,7 @@ public:
   using Table = std::vector<Iterator>;
   using Vault = std::list<Value>;
   using HashPair = std::pair<size_t, size_t>;
+  using HashMatch = std::pair<size_t, bool>;
   HashTable();
   HashTable(const std::initializer_list<Value> &items);
   ~HashTable();
@@ -54,6 +55,7 @@ private:
   void UpscaleTable();
   void DownscaleTable();
   void ResizeTable(size_t new_size);
+  HashMatch SeekHashMatchInTable(const Key &key);
   size_t SeekHashToEmptyInTable(const Key &key);
   HashPair CalculateHashPair(const Key &key);
   size_t CalculateScaleFactor(size_t size);

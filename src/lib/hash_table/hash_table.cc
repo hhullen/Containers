@@ -1,3 +1,4 @@
+#include <cstddef>
 #ifndef HASH_TABLE_HASH_TABLE_H_
 #include "hash_table.h"
 #endif // HASH_TABLE_HASH_TABLE_H_
@@ -41,13 +42,9 @@ bool HASH_TABLE_DEF::Empty() { return vault_.empty(); }
 
 HASH_TABLE_TEMPLATE_DEF
 typename HASH_TABLE_DEF::Iterator HASH_TABLE_DEF::Find(const Key &key) {
-  HashPair hashes = CalculateHashPair(key);
-  for (size_t i = 0; i < table_.size(); ++i) {
-    if (table_[hashes.first]._M_node &&
-        KeyRetractor()(*(table_[hashes.first])) == key) {
-      return table_[hashes.first];
-    }
-    hashes.first = (hashes.first + hashes.second) % table_.size();
+  HashMatch hash_match = SeekHashMatchInTable(key);
+  if (hash_match.second) {
+    return table_[hash_match.first];
   }
   return vault_.end();
 }
@@ -65,12 +62,13 @@ typename HASH_TABLE_DEF::Iterator HASH_TABLE_DEF::Emplace(const Value &value) {
 HASH_TABLE_TEMPLATE_DEF
 typename HASH_TABLE_DEF::Iterator HASH_TABLE_DEF::Delete(const Key &key) {
   DownscaleTable();
-  auto iter = Find(key);
-  if (iter != End()) {
-    std::cout << "ERASE\n";
-    return vault_.erase(iter);
+  HashMatch hash_match = SeekHashMatchInTable(key);
+  if (hash_match.second) {
+    auto iter_to_next = vault_.erase(table_[hash_match.first]);
+    table_[hash_match.first] = Iterator();
+    return iter_to_next;
   }
-  return iter;
+  return End();
 }
 
 HASH_TABLE_TEMPLATE_DEF
@@ -108,6 +106,20 @@ void HASH_TABLE_DEF::ResizeTable(size_t new_size) {
     size_t hash = SeekHashToEmptyInTable(key);
     table_[hash] = iter;
   }
+}
+
+HASH_TABLE_TEMPLATE_DEF
+typename HASH_TABLE_DEF::HashMatch
+HASH_TABLE_DEF::SeekHashMatchInTable(const Key &key) {
+  HashPair hashes = CalculateHashPair(key);
+  for (size_t i = 0; i < table_.size(); ++i) {
+    if (table_[hashes.first]._M_node &&
+        KeyRetractor()(*(table_[hashes.first])) == key) {
+      return HashMatch(hashes.first, true);
+    }
+    hashes.first = (hashes.first + hashes.second) % table_.size();
+  }
+  return HashMatch(0, false);
 }
 
 HASH_TABLE_TEMPLATE_DEF
