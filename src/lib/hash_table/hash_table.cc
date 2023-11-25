@@ -34,20 +34,20 @@ void HASH_TABLE_DEF::Clear() {
 }
 
 HASH_TABLE_TEMPLATE_DEF
-bool HASH_TABLE_DEF::Contains(const Key &key) { return true; }
+bool HASH_TABLE_DEF::Contains(const Key &key) { return Find(key) != End(); }
 
 HASH_TABLE_TEMPLATE_DEF
 bool HASH_TABLE_DEF::Empty() { return vault_.empty(); }
 
 HASH_TABLE_TEMPLATE_DEF
 typename HASH_TABLE_DEF::Iterator HASH_TABLE_DEF::Find(const Key &key) {
-  size_t hash = Hasher()(key) % table_.size();
-  size_t hash_step = hash;
+  HashPair hashes = CalculateHashPair(key);
   for (size_t i = 0; i < table_.size(); ++i) {
-    if (table_[hash]._M_node && KeyRetractor()(*(table_[hash])) == key) {
-      return table_[hash];
+    if (table_[hashes.first]._M_node &&
+        KeyRetractor()(*(table_[hashes.first])) == key) {
+      return table_[hashes.first];
     }
-    hash = (hash + hash_step) % table_.size();
+    hashes.first = (hashes.first + hashes.second) % table_.size();
   }
   return vault_.end();
 }
@@ -57,13 +57,21 @@ typename HASH_TABLE_DEF::Iterator HASH_TABLE_DEF::Emplace(const Value &value) {
   UpscaleTable();
   Key key = KeyRetractor()(value);
   size_t hash = SeekHashToEmptyInTable(key);
-  table_[hash] = vault_.end();
   vault_.emplace_back(value);
+  table_[hash] = --vault_.end();
   return table_[hash];
 }
 
 HASH_TABLE_TEMPLATE_DEF
-typename HASH_TABLE_DEF::Iterator HASH_TABLE_DEF::Delete(const Key &key) {}
+typename HASH_TABLE_DEF::Iterator HASH_TABLE_DEF::Delete(const Key &key) {
+  DownscaleTable();
+  auto iter = Find(key);
+  if (iter != End()) {
+    std::cout << "ERASE\n";
+    return vault_.erase(iter);
+  }
+  return iter;
+}
 
 HASH_TABLE_TEMPLATE_DEF
 size_t HASH_TABLE_DEF::Size() { return vault_.size(); }
@@ -73,31 +81,51 @@ size_t HASH_TABLE_DEF::Size() { return vault_.size(); }
 */
 
 HASH_TABLE_TEMPLATE_DEF
-size_t HASH_TABLE_DEF::SeekHashToEmptyInTable(const Key &key) {
-  size_t hash = Hasher()(key) % table_.size();
-  size_t hash_step = (Hasher()(key) + 1) % (table_.size() - 1);
-  for (size_t i = 0; table_[hash]._M_node && i < table_.size(); ++i) {
-    if (KeyRetractor()(*(table_[hash])) == key) {
-      return hash;
-    }
-    hash = (hash + hash_step * i) % table_.size();
-  }
-  return hash;
-}
-
-HASH_TABLE_TEMPLATE_DEF
 void HASH_TABLE_DEF::UpscaleTable() {
-  size_t test = vault_.size() * 100 / table_.size();
-  if (test < max_percent_filled_) {
+  size_t percent_filled = vault_.size() * 100 / table_.size();
+  if (percent_filled < max_percent_filled_) {
     return;
   }
   size_t new_size = CalculateScaleFactor(table_.size());
+  ResizeTable(new_size);
+}
+
+HASH_TABLE_TEMPLATE_DEF
+void HASH_TABLE_DEF::DownscaleTable() {
+  size_t percent_filled = vault_.size() * 100 / table_.size();
+  if (percent_filled > min_percent_filled_ || Size() <= default_table_size_) {
+    return;
+  }
+  size_t new_size = table_.size() * (max_percent_filled_ - 1) / 100;
+  ResizeTable(new_size);
+}
+
+HASH_TABLE_TEMPLATE_DEF
+void HASH_TABLE_DEF::ResizeTable(size_t new_size) {
   table_ = Table(new_size);
   for (auto iter = vault_.begin(); iter != vault_.end(); ++iter) {
     Key key = KeyRetractor()(*iter);
     size_t hash = SeekHashToEmptyInTable(key);
     table_[hash] = iter;
   }
+}
+
+HASH_TABLE_TEMPLATE_DEF
+size_t HASH_TABLE_DEF::SeekHashToEmptyInTable(const Key &key) {
+  HashPair hashes = CalculateHashPair(key);
+  for (size_t i = 0; table_[hashes.first]._M_node && i < table_.size(); ++i) {
+    if (KeyRetractor()(*(table_[hashes.first])) == key) {
+      return hashes.first;
+    }
+    hashes.first = (hashes.first + hashes.second) % table_.size();
+  }
+  return hashes.first;
+}
+
+HASH_TABLE_TEMPLATE_DEF
+typename HASH_TABLE_DEF::HashPair
+HASH_TABLE_DEF::CalculateHashPair(const Key &key) {
+  return HashPair(Hasher()(key) % table_.size(), (table_.size() - 1));
 }
 
 HASH_TABLE_TEMPLATE_DEF

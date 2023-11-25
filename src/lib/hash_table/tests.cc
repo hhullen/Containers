@@ -62,10 +62,34 @@ TEST(HashTable_test, Emplace_method_with_upscale) {
   }
 }
 
-TEST(HashTable_test, Find_method) {}
+TEST(HashTable_test, Find_method) {
+  hhullen::HashTable<double> ht;
+  for (double n = 0; n < 100000; n += 1) {
+    ht.Emplace(n);
+  }
+  for (double n = 0; n < 100000; n += 1) {
+    auto it = ht.Find(n);
+    EXPECT_TRUE(it != ht.End());
+    EXPECT_EQ(*it, n);
+  }
+}
 
-TEST(HashTable_test, Contains_method) {}
+TEST(HashTable_test, Contains_method) {
+  hhullen::HashTable<double> ht;
+  for (double n = 0; n < 100000; n += 1) {
+    ht.Emplace(n);
+  }
+  for (double n = 0; n < 100000; n += 1) {
+    EXPECT_TRUE(ht.Contains(n));
+  }
+}
 
-TEST(HashTable_test, Delete_method_no_downscale) {}
+TEST(HashTable_test, Delete_method_no_downscale) {
+  hhullen::HashTable<double> ht{1.0, 2.0, 3.0};
+  auto it = ht.Delete(2.0);
+  std::cout << ht.Size() << "\n";
+  it = ht.Find(3.0);
+  EXPECT_TRUE(it == ht.End());
+}
 
 TEST(HashTable_test, Delete_method_with_downscale) {}

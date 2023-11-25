@@ -26,12 +26,13 @@ class HashTable {
   static constexpr size_t default_table_size_{5};
   static constexpr size_t max_percent_filled_{70};
   static constexpr size_t min_percent_filled_{30};
-  static constexpr double table_scale_factor_{6};
+  static constexpr double table_scale_factor_{5};
 
 public:
   using Iterator = typename std::list<Value>::iterator;
   using Table = std::vector<Iterator>;
   using Vault = std::list<Value>;
+  using HashPair = std::pair<size_t, size_t>;
   HashTable();
   HashTable(const std::initializer_list<Value> &items);
   ~HashTable();
@@ -51,7 +52,10 @@ private:
   Vault vault_;
 
   void UpscaleTable();
+  void DownscaleTable();
+  void ResizeTable(size_t new_size);
   size_t SeekHashToEmptyInTable(const Key &key);
+  HashPair CalculateHashPair(const Key &key);
   size_t CalculateScaleFactor(size_t size);
 };
 
