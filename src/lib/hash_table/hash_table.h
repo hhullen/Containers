@@ -2,6 +2,7 @@
 #define HASH_TABLE_HASH_TABLE_H_
 
 #include <cmath>
+#include <cstddef>
 #include <functional>
 #include <iostream>
 #include <list>
@@ -26,7 +27,7 @@ class HashTable {
   static constexpr size_t default_table_size_{5};
   static constexpr size_t max_percent_filled_{70};
   static constexpr size_t min_percent_filled_{30};
-  static constexpr double table_scale_factor_{5};
+  static constexpr size_t table_scale_factor_{2};
 
 public:
   using Iterator = typename std::list<Value>::iterator;

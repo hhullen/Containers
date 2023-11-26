@@ -102,4 +102,14 @@ TEST(HashTable_test, Delete_method_no_downscale) {
   EXPECT_TRUE(it == ht.End());
 }
 
-TEST(HashTable_test, Delete_method_with_downscale) {}
+TEST(HashTable_test, Delete_method_with_downscale) {
+  hhullen::HashTable<double> ht;
+  for (double n = 0; n < 100000; n += 1) {
+    ht.Emplace(n);
+  }
+  for (double n = 100000; n >= 0; --n) {
+    auto it = ht.Delete(n);
+    EXPECT_EQ(ht.Size(), n);
+    EXPECT_TRUE(it == ht.End());
+  }
+}

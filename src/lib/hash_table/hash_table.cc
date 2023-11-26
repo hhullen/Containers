@@ -94,12 +94,12 @@ void HASH_TABLE_DEF::DownscaleTable() {
   if (percent_filled > min_percent_filled_ || Size() <= default_table_size_) {
     return;
   }
-  size_t new_size = table_.size() * (max_percent_filled_ - 1) / 100;
-  ResizeTable(new_size);
+  ResizeTable(table_.size() / table_scale_factor_);
 }
 
 HASH_TABLE_TEMPLATE_DEF
 void HASH_TABLE_DEF::ResizeTable(size_t new_size) {
+  // std::cout << "RESIZE TO: " << new_size << "\n";
   table_ = Table(new_size);
   for (auto iter = vault_.begin(); iter != vault_.end(); ++iter) {
     Key key = KeyRetractor()(*iter);
@@ -142,8 +142,7 @@ HASH_TABLE_DEF::CalculateHashPair(const Key &key) {
 
 HASH_TABLE_TEMPLATE_DEF
 size_t HASH_TABLE_DEF::CalculateScaleFactor(size_t size) {
-  return static_cast<size_t>(
-      std::pow(std::log(static_cast<double>(size)), table_scale_factor_));
+  return size * table_scale_factor_;
 }
 
 } // namespace hhullen
