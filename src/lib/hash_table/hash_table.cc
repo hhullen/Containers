@@ -99,7 +99,6 @@ void HASH_TABLE_DEF::DownscaleTable() {
 
 HASH_TABLE_TEMPLATE_DEF
 void HASH_TABLE_DEF::ResizeTable(size_t new_size) {
-  // std::cout << "RESIZE TO: " << new_size << "\n";
   table_ = Table(new_size);
   for (auto iter = vault_.begin(); iter != vault_.end(); ++iter) {
     Key key = KeyRetractor()(*iter);

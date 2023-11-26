@@ -2,9 +2,7 @@
 #define HASH_TABLE_HASH_TABLE_H_
 
 #include <cmath>
-#include <cstddef>
 #include <functional>
-#include <iostream>
 #include <list>
 #include <vector>
 
