@@ -21,7 +21,6 @@ template <class Value, class Key = Value,
           class KeyRetractor = HashTableKeyRetractor<Value>,
           class Hasher = std::hash<Value>>
 class HashTable {
-
 public:
   using Iterator = typename std::list<Value>::iterator;
   HashTable();
