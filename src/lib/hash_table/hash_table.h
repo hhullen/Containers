@@ -22,17 +22,8 @@ template <class Value, class Key = Value,
           class Hasher = std::hash<Value>>
 class HashTable {
 
-  static constexpr size_t default_table_size_{5};
-  static constexpr size_t max_percent_filled_{70};
-  static constexpr size_t min_percent_filled_{30};
-  static constexpr size_t table_scale_factor_{2};
-
 public:
   using Iterator = typename std::list<Value>::iterator;
-  using Table = std::vector<Iterator>;
-  using Vault = std::list<Value>;
-  using HashPair = std::pair<size_t, size_t>;
-  using HashMatch = std::pair<size_t, bool>;
   HashTable();
   HashTable(const std::initializer_list<Value> &items);
   ~HashTable();
@@ -48,6 +39,16 @@ public:
   size_t Size();
 
 private:
+  using Table = std::vector<Iterator>;
+  using Vault = std::list<Value>;
+  using HashPair = std::pair<size_t, size_t>;
+  using HashMatch = std::pair<size_t, bool>;
+
+  static constexpr size_t default_table_size_{5};
+  static constexpr size_t max_percent_filled_{70};
+  static constexpr size_t min_percent_filled_{30};
+  static constexpr size_t table_scale_factor_{2};
+
   Table table_;
   Vault vault_;
 

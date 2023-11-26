@@ -1,4 +1,3 @@
-#include <cstddef>
 #ifndef HASH_TABLE_HASH_TABLE_H_
 #include "hash_table.h"
 #endif // HASH_TABLE_HASH_TABLE_H_
