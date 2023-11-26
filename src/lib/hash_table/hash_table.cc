@@ -84,8 +84,7 @@ void HASH_TABLE_DEF::UpscaleTable() {
   if (percent_filled < max_percent_filled_) {
     return;
   }
-  size_t new_size = CalculateScaleFactor(table_.size());
-  ResizeTable(new_size);
+  ResizeTable(table_.size() * table_scale_factor_);
 }
 
 HASH_TABLE_TEMPLATE_DEF
@@ -137,11 +136,6 @@ HASH_TABLE_TEMPLATE_DEF
 typename HASH_TABLE_DEF::HashPair
 HASH_TABLE_DEF::CalculateHashPair(const Key &key) {
   return HashPair(Hasher()(key) % table_.size(), (table_.size() - 1));
-}
-
-HASH_TABLE_TEMPLATE_DEF
-size_t HASH_TABLE_DEF::CalculateScaleFactor(size_t size) {
-  return size * table_scale_factor_;
 }
 
 } // namespace hhullen

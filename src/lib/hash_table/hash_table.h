@@ -57,7 +57,6 @@ private:
   HashMatch SeekHashMatchInTable(const Key &key);
   size_t SeekHashToEmptyInTable(const Key &key);
   HashPair CalculateHashPair(const Key &key);
-  size_t CalculateScaleFactor(size_t size);
 };
 
 } // namespace hhullen
