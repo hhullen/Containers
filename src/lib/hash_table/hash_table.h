@@ -19,7 +19,7 @@ public:
 
 template <class Value, class Key = Value,
           class KeyRetractor = HashTableKeyRetractor<Value>,
-          class Hasher = std::hash<Value>>
+          class Hasher = std::hash<Key>>
 class HashTable {
 public:
   using Iterator = typename std::list<Value>::iterator;
